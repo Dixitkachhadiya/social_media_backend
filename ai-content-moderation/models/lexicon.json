@@ -1,0 +1,3407 @@
+{
+"format": "moderation-lexicon/v1",
+"entries": [
+{
+"term": "fuck",
+"category": "profanity",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "",
+"language": "en",
+"base_term": "fuck"
+},
+{
+"term": "fuk",
+"category": "profanity",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "",
+"language": "en",
+"base_term": "fuck"
+},
+{
+"term": "fck",
+"category": "profanity",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "",
+"language": "en",
+"base_term": "fuck"
+},
+{
+"term": "fuq",
+"category": "profanity",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "",
+"language": "en",
+"base_term": "fuck"
+},
+{
+"term": "phuck",
+"category": "profanity",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "",
+"language": "en",
+"base_term": "fuck"
+},
+{
+"term": "fuc",
+"category": "profanity",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "",
+"language": "en",
+"base_term": "fuck"
+},
+{
+"term": "fuuuuuck",
+"category": "profanity",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "",
+"language": "en",
+"base_term": "fuck"
+},
+{
+"term": "fucking",
+"category": "profanity",
+"severity": "low",
+"context_dependent": false,
+"replacement": "really",
+"language": "en",
+"base_term": "fucking"
+},
+{
+"term": "fuking",
+"category": "profanity",
+"severity": "low",
+"context_dependent": false,
+"replacement": "really",
+"language": "en",
+"base_term": "fucking"
+},
+{
+"term": "fcking",
+"category": "profanity",
+"severity": "low",
+"context_dependent": false,
+"replacement": "really",
+"language": "en",
+"base_term": "fucking"
+},
+{
+"term": "fukin",
+"category": "profanity",
+"severity": "low",
+"context_dependent": false,
+"replacement": "really",
+"language": "en",
+"base_term": "fucking"
+},
+{
+"term": "phucking",
+"category": "profanity",
+"severity": "low",
+"context_dependent": false,
+"replacement": "really",
+"language": "en",
+"base_term": "fucking"
+},
+{
+"term": "fkin",
+"category": "profanity",
+"severity": "low",
+"context_dependent": false,
+"replacement": "really",
+"language": "en",
+"base_term": "fucking"
+},
+{
+"term": "fffucking",
+"category": "profanity",
+"severity": "low",
+"context_dependent": false,
+"replacement": "really",
+"language": "en",
+"base_term": "fucking"
+},
+{
+"term": "what the fuck",
+"category": "profanity",
+"severity": "low",
+"context_dependent": false,
+"replacement": "what on earth",
+"language": "en",
+"base_term": "what the fuck"
+},
+{
+"term": "wtf",
+"category": "profanity",
+"severity": "low",
+"context_dependent": false,
+"replacement": "what on earth",
+"language": "en",
+"base_term": "what the fuck"
+},
+{
+"term": "w-h-a-t-t-h-e-f-u-c-k",
+"category": "profanity",
+"severity": "low",
+"context_dependent": false,
+"replacement": "what on earth",
+"language": "en",
+"base_term": "what the fuck"
+},
+{
+"term": "what the fuccck",
+"category": "profanity",
+"severity": "low",
+"context_dependent": false,
+"replacement": "what on earth",
+"language": "en",
+"base_term": "what the fuck"
+},
+{
+"term": "fuck off",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "please leave me alone",
+"language": "en",
+"base_term": "fuck off"
+},
+{
+"term": "fuk off",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "please leave me alone",
+"language": "en",
+"base_term": "fuck off"
+},
+{
+"term": "fck off",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "please leave me alone",
+"language": "en",
+"base_term": "fuck off"
+},
+{
+"term": "f u c k o f f",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "please leave me alone",
+"language": "en",
+"base_term": "fuck off"
+},
+{
+"term": "fuuuuuck off",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "please leave me alone",
+"language": "en",
+"base_term": "fuck off"
+},
+{
+"term": "fuck you",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "I am very upset with you",
+"language": "en",
+"base_term": "fuck you"
+},
+{
+"term": "fuk you",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "I am very upset with you",
+"language": "en",
+"base_term": "fuck you"
+},
+{
+"term": "fck you",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "I am very upset with you",
+"language": "en",
+"base_term": "fuck you"
+},
+{
+"term": "fuck u",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "I am very upset with you",
+"language": "en",
+"base_term": "fuck you"
+},
+{
+"term": "fk u",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "I am very upset with you",
+"language": "en",
+"base_term": "fuck you"
+},
+{
+"term": "f.u.c.k.y.o.u",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "I am very upset with you",
+"language": "en",
+"base_term": "fuck you"
+},
+{
+"term": "fuck youuuuu",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "I am very upset with you",
+"language": "en",
+"base_term": "fuck you"
+},
+{
+"term": "fucked up",
+"category": "profanity",
+"severity": "low",
+"context_dependent": false,
+"replacement": "messed up",
+"language": "en",
+"base_term": "fucked up"
+},
+{
+"term": "fked up",
+"category": "profanity",
+"severity": "low",
+"context_dependent": false,
+"replacement": "messed up",
+"language": "en",
+"base_term": "fucked up"
+},
+{
+"term": "fuked up",
+"category": "profanity",
+"severity": "low",
+"context_dependent": false,
+"replacement": "messed up",
+"language": "en",
+"base_term": "fucked up"
+},
+{
+"term": "f-u-c-k-e-d-u-p",
+"category": "profanity",
+"severity": "low",
+"context_dependent": false,
+"replacement": "messed up",
+"language": "en",
+"base_term": "fucked up"
+},
+{
+"term": "fuckkked up",
+"category": "profanity",
+"severity": "low",
+"context_dependent": false,
+"replacement": "messed up",
+"language": "en",
+"base_term": "fucked up"
+},
+{
+"term": "shit",
+"category": "profanity",
+"severity": "low",
+"context_dependent": false,
+"replacement": "rubbish",
+"language": "en",
+"base_term": "shit"
+},
+{
+"term": "shiit",
+"category": "profanity",
+"severity": "low",
+"context_dependent": false,
+"replacement": "rubbish",
+"language": "en",
+"base_term": "shit"
+},
+{
+"term": "shyt",
+"category": "profanity",
+"severity": "low",
+"context_dependent": false,
+"replacement": "rubbish",
+"language": "en",
+"base_term": "shit"
+},
+{
+"term": "bullshit",
+"category": "profanity",
+"severity": "low",
+"context_dependent": false,
+"replacement": "nonsense",
+"language": "en",
+"base_term": "bullshit"
+},
+{
+"term": "bs",
+"category": "profanity",
+"severity": "low",
+"context_dependent": false,
+"replacement": "nonsense",
+"language": "en",
+"base_term": "bullshit"
+},
+{
+"term": "bullshyt",
+"category": "profanity",
+"severity": "low",
+"context_dependent": false,
+"replacement": "nonsense",
+"language": "en",
+"base_term": "bullshit"
+},
+{
+"term": "bullssshit",
+"category": "profanity",
+"severity": "low",
+"context_dependent": false,
+"replacement": "nonsense",
+"language": "en",
+"base_term": "bullshit"
+},
+{
+"term": "piece of shit",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "terrible person",
+"language": "en",
+"base_term": "piece of shit"
+},
+{
+"term": "pos",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "terrible person",
+"language": "en",
+"base_term": "piece of shit"
+},
+{
+"term": "p i e c e o f s h i t",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "terrible person",
+"language": "en",
+"base_term": "piece of shit"
+},
+{
+"term": "piiiiiece of shit",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "terrible person",
+"language": "en",
+"base_term": "piece of shit"
+},
+{
+"term": "damn",
+"category": "profanity",
+"severity": "low",
+"context_dependent": false,
+"replacement": "",
+"language": "en",
+"base_term": "damn"
+},
+{
+"term": "dammit",
+"category": "profanity",
+"severity": "low",
+"context_dependent": false,
+"replacement": "",
+"language": "en",
+"base_term": "damn"
+},
+{
+"term": "damnit",
+"category": "profanity",
+"severity": "low",
+"context_dependent": false,
+"replacement": "",
+"language": "en",
+"base_term": "damn"
+},
+{
+"term": "daaaaamn",
+"category": "profanity",
+"severity": "low",
+"context_dependent": false,
+"replacement": "",
+"language": "en",
+"base_term": "damn"
+},
+{
+"term": "crap",
+"category": "profanity",
+"severity": "low",
+"context_dependent": false,
+"replacement": "poor",
+"language": "en",
+"base_term": "crap"
+},
+{
+"term": "crappy",
+"category": "profanity",
+"severity": "low",
+"context_dependent": false,
+"replacement": "poor",
+"language": "en",
+"base_term": "crap"
+},
+{
+"term": "cccrap",
+"category": "profanity",
+"severity": "low",
+"context_dependent": false,
+"replacement": "poor",
+"language": "en",
+"base_term": "crap"
+},
+{
+"term": "bitch",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "rude person",
+"language": "en",
+"base_term": "bitch"
+},
+{
+"term": "biatch",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "rude person",
+"language": "en",
+"base_term": "bitch"
+},
+{
+"term": "bich",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "rude person",
+"language": "en",
+"base_term": "bitch"
+},
+{
+"term": "bitchy",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "rude person",
+"language": "en",
+"base_term": "bitch"
+},
+{
+"term": "bitchhh",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "rude person",
+"language": "en",
+"base_term": "bitch"
+},
+{
+"term": "bastard",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "rude person",
+"language": "en",
+"base_term": "bastard"
+},
+{
+"term": "basterd",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "rude person",
+"language": "en",
+"base_term": "bastard"
+},
+{
+"term": "bastttttard",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "rude person",
+"language": "en",
+"base_term": "bastard"
+},
+{
+"term": "asshole",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "rude person",
+"language": "en",
+"base_term": "asshole"
+},
+{
+"term": "arsehole",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "rude person",
+"language": "en",
+"base_term": "asshole"
+},
+{
+"term": "ahole",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "rude person",
+"language": "en",
+"base_term": "asshole"
+},
+{
+"term": "dickhead",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "rude person",
+"language": "en",
+"base_term": "dickhead"
+},
+{
+"term": "dikhead",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "rude person",
+"language": "en",
+"base_term": "dickhead"
+},
+{
+"term": "dddddickhead",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "rude person",
+"language": "en",
+"base_term": "dickhead"
+},
+{
+"term": "idiot",
+"category": "insult",
+"severity": "low",
+"context_dependent": true,
+"replacement": "careless person",
+"language": "en",
+"base_term": "idiot"
+},
+{
+"term": "idiat",
+"category": "insult",
+"severity": "low",
+"context_dependent": true,
+"replacement": "careless person",
+"language": "en",
+"base_term": "idiot"
+},
+{
+"term": "idot",
+"category": "insult",
+"severity": "low",
+"context_dependent": true,
+"replacement": "careless person",
+"language": "en",
+"base_term": "idiot"
+},
+{
+"term": "idiotttt",
+"category": "insult",
+"severity": "low",
+"context_dependent": true,
+"replacement": "careless person",
+"language": "en",
+"base_term": "idiot"
+},
+{
+"term": "moron",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "careless person",
+"language": "en",
+"base_term": "moron"
+},
+{
+"term": "moran",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "careless person",
+"language": "en",
+"base_term": "moron"
+},
+{
+"term": "morrron",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "careless person",
+"language": "en",
+"base_term": "moron"
+},
+{
+"term": "dumbass",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "careless person",
+"language": "en",
+"base_term": "dumbass"
+},
+{
+"term": "dumass",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "careless person",
+"language": "en",
+"base_term": "dumbass"
+},
+{
+"term": "dumb ass",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "careless person",
+"language": "en",
+"base_term": "dumbass"
+},
+{
+"term": "dumbbbbbass",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "careless person",
+"language": "en",
+"base_term": "dumbass"
+},
+{
+"term": "jerk",
+"category": "insult",
+"severity": "low",
+"context_dependent": true,
+"replacement": "rude person",
+"language": "en",
+"base_term": "jerk"
+},
+{
+"term": "jurk",
+"category": "insult",
+"severity": "low",
+"context_dependent": true,
+"replacement": "rude person",
+"language": "en",
+"base_term": "jerk"
+},
+{
+"term": "jjjerk",
+"category": "insult",
+"severity": "low",
+"context_dependent": true,
+"replacement": "rude person",
+"language": "en",
+"base_term": "jerk"
+},
+{
+"term": "loser",
+"category": "insult",
+"severity": "low",
+"context_dependent": true,
+"replacement": "person",
+"language": "en",
+"base_term": "loser"
+},
+{
+"term": "looser",
+"category": "insult",
+"severity": "low",
+"context_dependent": true,
+"replacement": "person",
+"language": "en",
+"base_term": "loser"
+},
+{
+"term": "loserrrr",
+"category": "insult",
+"severity": "low",
+"context_dependent": true,
+"replacement": "person",
+"language": "en",
+"base_term": "loser"
+},
+{
+"term": "scumbag",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "dishonest person",
+"language": "en",
+"base_term": "scumbag"
+},
+{
+"term": "scum bag",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "dishonest person",
+"language": "en",
+"base_term": "scumbag"
+},
+{
+"term": "scum",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "dishonest person",
+"language": "en",
+"base_term": "scumbag"
+},
+{
+"term": "scumbbbbbag",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "dishonest person",
+"language": "en",
+"base_term": "scumbag"
+},
+{
+"term": "slut",
+"category": "harassment",
+"severity": "high",
+"context_dependent": false,
+"replacement": "person",
+"language": "en",
+"base_term": "slut"
+},
+{
+"term": "sl*t",
+"category": "harassment",
+"severity": "high",
+"context_dependent": false,
+"replacement": "person",
+"language": "en",
+"base_term": "slut"
+},
+{
+"term": "slutt",
+"category": "harassment",
+"severity": "high",
+"context_dependent": false,
+"replacement": "person",
+"language": "en",
+"base_term": "slut"
+},
+{
+"term": "sluuuut",
+"category": "harassment",
+"severity": "high",
+"context_dependent": false,
+"replacement": "person",
+"language": "en",
+"base_term": "slut"
+},
+{
+"term": "whore",
+"category": "harassment",
+"severity": "high",
+"context_dependent": false,
+"replacement": "person",
+"language": "en",
+"base_term": "whore"
+},
+{
+"term": "hoe",
+"category": "harassment",
+"severity": "high",
+"context_dependent": false,
+"replacement": "person",
+"language": "en",
+"base_term": "whore"
+},
+{
+"term": "whoreeee",
+"category": "harassment",
+"severity": "high",
+"context_dependent": false,
+"replacement": "person",
+"language": "en",
+"base_term": "whore"
+},
+{
+"term": "retard",
+"category": "harassment",
+"severity": "high",
+"context_dependent": false,
+"replacement": "person",
+"language": "en",
+"base_term": "retard"
+},
+{
+"term": "retart",
+"category": "harassment",
+"severity": "high",
+"context_dependent": false,
+"replacement": "person",
+"language": "en",
+"base_term": "retard"
+},
+{
+"term": "tard",
+"category": "harassment",
+"severity": "high",
+"context_dependent": false,
+"replacement": "person",
+"language": "en",
+"base_term": "retard"
+},
+{
+"term": "rrrrretard",
+"category": "harassment",
+"severity": "high",
+"context_dependent": false,
+"replacement": "person",
+"language": "en",
+"base_term": "retard"
+},
+{
+"term": "kill yourself",
+"category": "harassment",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "en",
+"base_term": "kill yourself"
+},
+{
+"term": "kys",
+"category": "harassment",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "en",
+"base_term": "kill yourself"
+},
+{
+"term": "kill urself",
+"category": "harassment",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "en",
+"base_term": "kill yourself"
+},
+{
+"term": "kill yourselves",
+"category": "harassment",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "en",
+"base_term": "kill yourself"
+},
+{
+"term": "k.i.l.l.y.o.u.r.s.e.l.f",
+"category": "harassment",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "en",
+"base_term": "kill yourself"
+},
+{
+"term": "kiiiill yourself",
+"category": "harassment",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "en",
+"base_term": "kill yourself"
+},
+{
+"term": "nobody wants you",
+"category": "harassment",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "",
+"language": "en",
+"base_term": "nobody wants you"
+},
+{
+"term": "no one wants you",
+"category": "harassment",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "",
+"language": "en",
+"base_term": "nobody wants you"
+},
+{
+"term": "n o b o d y w a n t s y o u",
+"category": "harassment",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "",
+"language": "en",
+"base_term": "nobody wants you"
+},
+{
+"term": "nobooooody wants you",
+"category": "harassment",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "",
+"language": "en",
+"base_term": "nobody wants you"
+},
+{
+"term": "kill you",
+"category": "threat",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "en",
+"base_term": "kill you"
+},
+{
+"term": "kil you",
+"category": "threat",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "en",
+"base_term": "kill you"
+},
+{
+"term": "kill u",
+"category": "threat",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "en",
+"base_term": "kill you"
+},
+{
+"term": "k i l l y o u",
+"category": "threat",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "en",
+"base_term": "kill you"
+},
+{
+"term": "kkkkill you",
+"category": "threat",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "en",
+"base_term": "kill you"
+},
+{
+"term": "beat you up",
+"category": "threat",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "en",
+"base_term": "beat you up"
+},
+{
+"term": "beat u up",
+"category": "threat",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "en",
+"base_term": "beat you up"
+},
+{
+"term": "b-e-a-t-y-o-u-u-p",
+"category": "threat",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "en",
+"base_term": "beat you up"
+},
+{
+"term": "beat yooooou up",
+"category": "threat",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "en",
+"base_term": "beat you up"
+},
+{
+"term": "break your legs",
+"category": "threat",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "en",
+"base_term": "break your legs"
+},
+{
+"term": "break ur legs",
+"category": "threat",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "en",
+"base_term": "break your legs"
+},
+{
+"term": "b r e a k y o u r l e g s",
+"category": "threat",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "en",
+"base_term": "break your legs"
+},
+{
+"term": "break your leeegs",
+"category": "threat",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "en",
+"base_term": "break your legs"
+},
+{
+"term": "you are dead",
+"category": "threat",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "en",
+"base_term": "you are dead"
+},
+{
+"term": "ur dead",
+"category": "threat",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "en",
+"base_term": "you are dead"
+},
+{
+"term": "you're dead",
+"category": "threat",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "en",
+"base_term": "you are dead"
+},
+{
+"term": "youre dead",
+"category": "threat",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "en",
+"base_term": "you are dead"
+},
+{
+"term": "y-o-u-a-r-e-d-e-a-d",
+"category": "threat",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "en",
+"base_term": "you are dead"
+},
+{
+"term": "you arrrre dead",
+"category": "threat",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "en",
+"base_term": "you are dead"
+},
+{
+"term": "watch your back",
+"category": "threat",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "en",
+"base_term": "watch your back"
+},
+{
+"term": "watch ur back",
+"category": "threat",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "en",
+"base_term": "watch your back"
+},
+{
+"term": "w.a.t.c.h.y.o.u.r.b.a.c.k",
+"category": "threat",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "en",
+"base_term": "watch your back"
+},
+{
+"term": "watchhhh your back",
+"category": "threat",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "en",
+"base_term": "watch your back"
+},
+{
+"term": "subhuman",
+"category": "hate",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "en",
+"base_term": "subhuman"
+},
+{
+"term": "sub human",
+"category": "hate",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "en",
+"base_term": "subhuman"
+},
+{
+"term": "subhhhhuman",
+"category": "hate",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "en",
+"base_term": "subhuman"
+},
+{
+"term": "vermin",
+"category": "hate",
+"severity": "high",
+"context_dependent": true,
+"replacement": "",
+"language": "en",
+"base_term": "vermin"
+},
+{
+"term": "vermins",
+"category": "hate",
+"severity": "high",
+"context_dependent": true,
+"replacement": "",
+"language": "en",
+"base_term": "vermin"
+},
+{
+"term": "vermiiiin",
+"category": "hate",
+"severity": "high",
+"context_dependent": true,
+"replacement": "",
+"language": "en",
+"base_term": "vermin"
+},
+{
+"term": "go back to your country",
+"category": "hate",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "en",
+"base_term": "go back to your country"
+},
+{
+"term": "go back to ur country",
+"category": "hate",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "en",
+"base_term": "go back to your country"
+},
+{
+"term": "g-o-b-a-c-k-t-o-y-o-u-r-c-o-u-n-t-r-y",
+"category": "hate",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "en",
+"base_term": "go back to your country"
+},
+{
+"term": "go back to yoooour country",
+"category": "hate",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "en",
+"base_term": "go back to your country"
+},
+{
+"term": "chutiya",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "bewakoof insaan",
+"language": "hi-Latn",
+"base_term": "chutiya"
+},
+{
+"term": "chutia",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "bewakoof insaan",
+"language": "hi-Latn",
+"base_term": "chutiya"
+},
+{
+"term": "chootiya",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "bewakoof insaan",
+"language": "hi-Latn",
+"base_term": "chutiya"
+},
+{
+"term": "chutiye",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "bewakoof insaan",
+"language": "hi-Latn",
+"base_term": "chutiya"
+},
+{
+"term": "ch*tiya",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "bewakoof insaan",
+"language": "hi-Latn",
+"base_term": "chutiya"
+},
+{
+"term": "chutya",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "bewakoof insaan",
+"language": "hi-Latn",
+"base_term": "chutiya"
+},
+{
+"term": "chu tiya",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "bewakoof insaan",
+"language": "hi-Latn",
+"base_term": "chutiya"
+},
+{
+"term": "chutiiiiya",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "bewakoof insaan",
+"language": "hi-Latn",
+"base_term": "chutiya"
+},
+{
+"term": "chutiyapa",
+"category": "profanity",
+"severity": "low",
+"context_dependent": false,
+"replacement": "bakwas",
+"language": "hi-Latn",
+"base_term": "chutiyapa"
+},
+{
+"term": "chutiyapanti",
+"category": "profanity",
+"severity": "low",
+"context_dependent": false,
+"replacement": "bakwas",
+"language": "hi-Latn",
+"base_term": "chutiyapa"
+},
+{
+"term": "chutiyap",
+"category": "profanity",
+"severity": "low",
+"context_dependent": false,
+"replacement": "bakwas",
+"language": "hi-Latn",
+"base_term": "chutiyapa"
+},
+{
+"term": "chutiyyyapa",
+"category": "profanity",
+"severity": "low",
+"context_dependent": false,
+"replacement": "bakwas",
+"language": "hi-Latn",
+"base_term": "chutiyapa"
+},
+{
+"term": "bhenchod",
+"category": "profanity",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "bhenchod"
+},
+{
+"term": "behenchod",
+"category": "profanity",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "bhenchod"
+},
+{
+"term": "bhencho",
+"category": "profanity",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "bhenchod"
+},
+{
+"term": "bhenchodd",
+"category": "profanity",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "bhenchod"
+},
+{
+"term": "bhen chod",
+"category": "profanity",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "bhenchod"
+},
+{
+"term": "bhenchoooood",
+"category": "profanity",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "bhenchod"
+},
+{
+"term": "madarchod",
+"category": "profanity",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "madarchod"
+},
+{
+"term": "maderchod",
+"category": "profanity",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "madarchod"
+},
+{
+"term": "mdrchod",
+"category": "profanity",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "madarchod"
+},
+{
+"term": "madarchodd",
+"category": "profanity",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "madarchod"
+},
+{
+"term": "maadarchod",
+"category": "profanity",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "madarchod"
+},
+{
+"term": "madarcccchod",
+"category": "profanity",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "madarchod"
+},
+{
+"term": "gandu",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "bekaar insaan",
+"language": "hi-Latn",
+"base_term": "gandu"
+},
+{
+"term": "gaandu",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "bekaar insaan",
+"language": "hi-Latn",
+"base_term": "gandu"
+},
+{
+"term": "gandoo",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "bekaar insaan",
+"language": "hi-Latn",
+"base_term": "gandu"
+},
+{
+"term": "gannnnndu",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "bekaar insaan",
+"language": "hi-Latn",
+"base_term": "gandu"
+},
+{
+"term": "harami",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "dhokebaaz insaan",
+"language": "hi-Latn",
+"base_term": "harami"
+},
+{
+"term": "haraami",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "dhokebaaz insaan",
+"language": "hi-Latn",
+"base_term": "harami"
+},
+{
+"term": "haramkhor",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "dhokebaaz insaan",
+"language": "hi-Latn",
+"base_term": "harami"
+},
+{
+"term": "haramzada",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "dhokebaaz insaan",
+"language": "hi-Latn",
+"base_term": "harami"
+},
+{
+"term": "haraamzaade",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "dhokebaaz insaan",
+"language": "hi-Latn",
+"base_term": "harami"
+},
+{
+"term": "hhhhharami",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "dhokebaaz insaan",
+"language": "hi-Latn",
+"base_term": "harami"
+},
+{
+"term": "kamina",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "bura insaan",
+"language": "hi-Latn",
+"base_term": "kamina"
+},
+{
+"term": "kameena",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "bura insaan",
+"language": "hi-Latn",
+"base_term": "kamina"
+},
+{
+"term": "kamine",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "bura insaan",
+"language": "hi-Latn",
+"base_term": "kamina"
+},
+{
+"term": "kamini",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "bura insaan",
+"language": "hi-Latn",
+"base_term": "kamina"
+},
+{
+"term": "kameeni",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "bura insaan",
+"language": "hi-Latn",
+"base_term": "kamina"
+},
+{
+"term": "kaminnna",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "bura insaan",
+"language": "hi-Latn",
+"base_term": "kamina"
+},
+{
+"term": "kutte",
+"category": "insult",
+"severity": "medium",
+"context_dependent": true,
+"replacement": "insaan",
+"language": "hi-Latn",
+"base_term": "kutte"
+},
+{
+"term": "kutta",
+"category": "insult",
+"severity": "medium",
+"context_dependent": true,
+"replacement": "insaan",
+"language": "hi-Latn",
+"base_term": "kutte"
+},
+{
+"term": "kuttey",
+"category": "insult",
+"severity": "medium",
+"context_dependent": true,
+"replacement": "insaan",
+"language": "hi-Latn",
+"base_term": "kutte"
+},
+{
+"term": "kutti",
+"category": "insult",
+"severity": "medium",
+"context_dependent": true,
+"replacement": "insaan",
+"language": "hi-Latn",
+"base_term": "kutte"
+},
+{
+"term": "kuttiya",
+"category": "harassment",
+"severity": "high",
+"context_dependent": false,
+"replacement": "insaan",
+"language": "hi-Latn",
+"base_term": "kuttiya"
+},
+{
+"term": "kutiya",
+"category": "harassment",
+"severity": "high",
+"context_dependent": false,
+"replacement": "insaan",
+"language": "hi-Latn",
+"base_term": "kuttiya"
+},
+{
+"term": "kuttiyaa",
+"category": "harassment",
+"severity": "high",
+"context_dependent": false,
+"replacement": "insaan",
+"language": "hi-Latn",
+"base_term": "kuttiya"
+},
+{
+"term": "kuttiyyyyya",
+"category": "harassment",
+"severity": "high",
+"context_dependent": false,
+"replacement": "insaan",
+"language": "hi-Latn",
+"base_term": "kuttiya"
+},
+{
+"term": "saala",
+"category": "profanity",
+"severity": "low",
+"context_dependent": true,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "saala"
+},
+{
+"term": "sala",
+"category": "profanity",
+"severity": "low",
+"context_dependent": true,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "saala"
+},
+{
+"term": "saale",
+"category": "profanity",
+"severity": "low",
+"context_dependent": true,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "saala"
+},
+{
+"term": "saali",
+"category": "profanity",
+"severity": "low",
+"context_dependent": true,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "saala"
+},
+{
+"term": "saaley",
+"category": "profanity",
+"severity": "low",
+"context_dependent": true,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "saala"
+},
+{
+"term": "ssssaala",
+"category": "profanity",
+"severity": "low",
+"context_dependent": true,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "saala"
+},
+{
+"term": "ullu ka pattha",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "nasamajh",
+"language": "hi-Latn",
+"base_term": "ullu ka pattha"
+},
+{
+"term": "ullu ke patthe",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "nasamajh",
+"language": "hi-Latn",
+"base_term": "ullu ka pattha"
+},
+{
+"term": "ulloo ka pattha",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "nasamajh",
+"language": "hi-Latn",
+"base_term": "ullu ka pattha"
+},
+{
+"term": "u-l-l-u-k-a-p-a-t-t-h-a",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "nasamajh",
+"language": "hi-Latn",
+"base_term": "ullu ka pattha"
+},
+{
+"term": "bewakoof",
+"category": "insult",
+"severity": "low",
+"context_dependent": true,
+"replacement": "nasamajh",
+"language": "hi-Latn",
+"base_term": "bewakoof"
+},
+{
+"term": "bevakoof",
+"category": "insult",
+"severity": "low",
+"context_dependent": true,
+"replacement": "nasamajh",
+"language": "hi-Latn",
+"base_term": "bewakoof"
+},
+{
+"term": "bewakuf",
+"category": "insult",
+"severity": "low",
+"context_dependent": true,
+"replacement": "nasamajh",
+"language": "hi-Latn",
+"base_term": "bewakoof"
+},
+{
+"term": "bevkoof",
+"category": "insult",
+"severity": "low",
+"context_dependent": true,
+"replacement": "nasamajh",
+"language": "hi-Latn",
+"base_term": "bewakoof"
+},
+{
+"term": "bewakkkkoof",
+"category": "insult",
+"severity": "low",
+"context_dependent": true,
+"replacement": "nasamajh",
+"language": "hi-Latn",
+"base_term": "bewakoof"
+},
+{
+"term": "gadha",
+"category": "insult",
+"severity": "low",
+"context_dependent": true,
+"replacement": "nasamajh",
+"language": "hi-Latn",
+"base_term": "gadha"
+},
+{
+"term": "gadhe",
+"category": "insult",
+"severity": "low",
+"context_dependent": true,
+"replacement": "nasamajh",
+"language": "hi-Latn",
+"base_term": "gadha"
+},
+{
+"term": "gadhaa",
+"category": "insult",
+"severity": "low",
+"context_dependent": true,
+"replacement": "nasamajh",
+"language": "hi-Latn",
+"base_term": "gadha"
+},
+{
+"term": "gggggadha",
+"category": "insult",
+"severity": "low",
+"context_dependent": true,
+"replacement": "nasamajh",
+"language": "hi-Latn",
+"base_term": "gadha"
+},
+{
+"term": "randi",
+"category": "harassment",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "randi"
+},
+{
+"term": "randii",
+"category": "harassment",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "randi"
+},
+{
+"term": "randwa",
+"category": "harassment",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "randi"
+},
+{
+"term": "randddi",
+"category": "harassment",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "randi"
+},
+{
+"term": "bhosdike",
+"category": "insult",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "bhosdike"
+},
+{
+"term": "bhosdi ke",
+"category": "insult",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "bhosdike"
+},
+{
+"term": "bhosdiwale",
+"category": "insult",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "bhosdike"
+},
+{
+"term": "bhosadike",
+"category": "insult",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "bhosdike"
+},
+{
+"term": "bsdk",
+"category": "insult",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "bhosdike"
+},
+{
+"term": "bhosdiiike",
+"category": "insult",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "bhosdike"
+},
+{
+"term": "lavde",
+"category": "profanity",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "lavde"
+},
+{
+"term": "lode",
+"category": "profanity",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "lavde"
+},
+{
+"term": "lauda",
+"category": "profanity",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "lavde"
+},
+{
+"term": "lawde",
+"category": "profanity",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "lavde"
+},
+{
+"term": "lund",
+"category": "profanity",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "lavde"
+},
+{
+"term": "lllllavde",
+"category": "profanity",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "lavde"
+},
+{
+"term": "teri maa ki",
+"category": "insult",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "teri maa ki"
+},
+{
+"term": "teri ma ki",
+"category": "insult",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "teri maa ki"
+},
+{
+"term": "teri maa ka",
+"category": "insult",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "teri maa ki"
+},
+{
+"term": "t-e-r-i-m-a-a-k-i",
+"category": "insult",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "teri maa ki"
+},
+{
+"term": "teri mmmmaa ki",
+"category": "insult",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "teri maa ki"
+},
+{
+"term": "maar dunga",
+"category": "threat",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "maar dunga"
+},
+{
+"term": "maar dalunga",
+"category": "threat",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "maar dunga"
+},
+{
+"term": "mar dunga",
+"category": "threat",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "maar dunga"
+},
+{
+"term": "maar doonga",
+"category": "threat",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "maar dunga"
+},
+{
+"term": "m a a r d u n g a",
+"category": "threat",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "maar dunga"
+},
+{
+"term": "maar dunnnnga",
+"category": "threat",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "maar dunga"
+},
+{
+"term": "jaan se maar",
+"category": "threat",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "jaan se maar"
+},
+{
+"term": "jaan se maar dunga",
+"category": "threat",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "jaan se maar"
+},
+{
+"term": "jaan se maar denge",
+"category": "threat",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "jaan se maar"
+},
+{
+"term": "j-a-a-n-s-e-m-a-a-r",
+"category": "threat",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "jaan se maar"
+},
+{
+"term": "tujhe dekh lunga",
+"category": "threat",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "tujhe dekh lunga"
+},
+{
+"term": "dekh lunga tujhe",
+"category": "threat",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "tujhe dekh lunga"
+},
+{
+"term": "tujhe dekh loonga",
+"category": "threat",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "tujhe dekh lunga"
+},
+{
+"term": "t u j h e d e k h l u n g a",
+"category": "threat",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "tujhe dekh lunga"
+},
+{
+"term": "tttujhe dekh lunga",
+"category": "threat",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "tujhe dekh lunga"
+},
+{
+"term": "haath pair tod dunga",
+"category": "threat",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "haath pair tod dunga"
+},
+{
+"term": "haath pair tod denge",
+"category": "threat",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "haath pair tod dunga"
+},
+{
+"term": "taang tod dunga",
+"category": "threat",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "haath pair tod dunga"
+},
+{
+"term": "h.a.a.t.h.p.a.i.r.t.o.d.d.u.n.g.a",
+"category": "threat",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "haath pair tod dunga"
+},
+{
+"term": "haath pairrr tod dunga",
+"category": "threat",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "haath pair tod dunga"
+},
+{
+"term": "keede makode",
+"category": "hate",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "keede makode"
+},
+{
+"term": "keedey",
+"category": "hate",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "keede makode"
+},
+{
+"term": "keede hain",
+"category": "hate",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "keede makode"
+},
+{
+"term": "k e e d e m a k o d e",
+"category": "hate",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "keede makode"
+},
+{
+"term": "keedeeeee makode",
+"category": "hate",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "keede makode"
+},
+{
+"term": "desh se nikalo",
+"category": "hate",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "desh se nikalo"
+},
+{
+"term": "desh se nikaal do",
+"category": "hate",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "desh se nikalo"
+},
+{
+"term": "inko bahar nikalo",
+"category": "hate",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "desh se nikalo"
+},
+{
+"term": "d3sh $3 nik4l0",
+"category": "hate",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "desh se nikalo"
+},
+{
+"term": "d-e-s-h-s-e-n-i-k-a-l-o",
+"category": "hate",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "desh se nikalo"
+},
+{
+"term": "deshhh se nikalo",
+"category": "hate",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "hi-Latn",
+"base_term": "desh se nikalo"
+},
+{
+"term": "चूतिया",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "बेवकूफ इंसान",
+"language": "hi",
+"base_term": "चूतिया"
+},
+{
+"term": "चुतिया",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "बेवकूफ इंसान",
+"language": "hi",
+"base_term": "चूतिया"
+},
+{
+"term": "चूतिये",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "बेवकूफ इंसान",
+"language": "hi",
+"base_term": "चूतिया"
+},
+{
+"term": "बहनचोद",
+"category": "profanity",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "",
+"language": "hi",
+"base_term": "बहनचोद"
+},
+{
+"term": "बहन चोद",
+"category": "profanity",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "",
+"language": "hi",
+"base_term": "बहनचोद"
+},
+{
+"term": "भेनचोद",
+"category": "profanity",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "",
+"language": "hi",
+"base_term": "बहनचोद"
+},
+{
+"term": "मादरचोद",
+"category": "profanity",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "hi",
+"base_term": "मादरचोद"
+},
+{
+"term": "मादर चोद",
+"category": "profanity",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "hi",
+"base_term": "मादरचोद"
+},
+{
+"term": "गांडू",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "बेकार इंसान",
+"language": "hi",
+"base_term": "गांडू"
+},
+{
+"term": "गाँडू",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "बेकार इंसान",
+"language": "hi",
+"base_term": "गांडू"
+},
+{
+"term": "हरामी",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "धोखेबाज़ इंसान",
+"language": "hi",
+"base_term": "हरामी"
+},
+{
+"term": "हरामज़ादा",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "धोखेबाज़ इंसान",
+"language": "hi",
+"base_term": "हरामी"
+},
+{
+"term": "हरामखोर",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "धोखेबाज़ इंसान",
+"language": "hi",
+"base_term": "हरामी"
+},
+{
+"term": "कमीना",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "बुरा इंसान",
+"language": "hi",
+"base_term": "कमीना"
+},
+{
+"term": "कमीने",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "बुरा इंसान",
+"language": "hi",
+"base_term": "कमीना"
+},
+{
+"term": "कमीनी",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "बुरा इंसान",
+"language": "hi",
+"base_term": "कमीना"
+},
+{
+"term": "कुत्ते",
+"category": "insult",
+"severity": "medium",
+"context_dependent": true,
+"replacement": "इंसान",
+"language": "hi",
+"base_term": "कुत्ते"
+},
+{
+"term": "कुत्ता",
+"category": "insult",
+"severity": "medium",
+"context_dependent": true,
+"replacement": "इंसान",
+"language": "hi",
+"base_term": "कुत्ते"
+},
+{
+"term": "कुत्ती",
+"category": "insult",
+"severity": "medium",
+"context_dependent": true,
+"replacement": "इंसान",
+"language": "hi",
+"base_term": "कुत्ते"
+},
+{
+"term": "साला",
+"category": "profanity",
+"severity": "low",
+"context_dependent": true,
+"replacement": "",
+"language": "hi",
+"base_term": "साला"
+},
+{
+"term": "साले",
+"category": "profanity",
+"severity": "low",
+"context_dependent": true,
+"replacement": "",
+"language": "hi",
+"base_term": "साला"
+},
+{
+"term": "साली",
+"category": "profanity",
+"severity": "low",
+"context_dependent": true,
+"replacement": "",
+"language": "hi",
+"base_term": "साला"
+},
+{
+"term": "बेवकूफ",
+"category": "insult",
+"severity": "low",
+"context_dependent": true,
+"replacement": "नासमझ",
+"language": "hi",
+"base_term": "बेवकूफ"
+},
+{
+"term": "बेवकूफ़",
+"category": "insult",
+"severity": "low",
+"context_dependent": true,
+"replacement": "नासमझ",
+"language": "hi",
+"base_term": "बेवकूफ"
+},
+{
+"term": "रंडी",
+"category": "harassment",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "hi",
+"base_term": "रंडी"
+},
+{
+"term": "भोसड़ीके",
+"category": "insult",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "hi",
+"base_term": "भोसड़ीके"
+},
+{
+"term": "भोसडीके",
+"category": "insult",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "hi",
+"base_term": "भोसड़ीके"
+},
+{
+"term": "भोसड़ी के",
+"category": "insult",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "hi",
+"base_term": "भोसड़ीके"
+},
+{
+"term": "मार डालूंगा",
+"category": "threat",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "hi",
+"base_term": "मार डालूंगा"
+},
+{
+"term": "मार डालूँगा",
+"category": "threat",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "hi",
+"base_term": "मार डालूंगा"
+},
+{
+"term": "मार दूंगा",
+"category": "threat",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "hi",
+"base_term": "मार डालूंगा"
+},
+{
+"term": "जान से मार",
+"category": "threat",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "hi",
+"base_term": "जान से मार"
+},
+{
+"term": "जान से मार दूंगा",
+"category": "threat",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "hi",
+"base_term": "जान से मार"
+},
+{
+"term": "देख लूंगा",
+"category": "threat",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "",
+"language": "hi",
+"base_term": "देख लूंगा"
+},
+{
+"term": "तुझे देख लूंगा",
+"category": "threat",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "",
+"language": "hi",
+"base_term": "देख लूंगा"
+},
+{
+"term": "कीड़े मकोड़े",
+"category": "hate",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "hi",
+"base_term": "कीड़े मकोड़े"
+},
+{
+"term": "कीड़े हैं",
+"category": "hate",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "hi",
+"base_term": "कीड़े मकोड़े"
+},
+{
+"term": "gando",
+"category": "insult",
+"severity": "low",
+"context_dependent": true,
+"replacement": "nasamajh",
+"language": "gu-Latn",
+"base_term": "gando"
+},
+{
+"term": "gaando",
+"category": "insult",
+"severity": "low",
+"context_dependent": true,
+"replacement": "nasamajh",
+"language": "gu-Latn",
+"base_term": "gando"
+},
+{
+"term": "gandi",
+"category": "insult",
+"severity": "low",
+"context_dependent": true,
+"replacement": "nasamajh",
+"language": "gu-Latn",
+"base_term": "gando"
+},
+{
+"term": "gadhedo",
+"category": "insult",
+"severity": "low",
+"context_dependent": true,
+"replacement": "nasamajh",
+"language": "gu-Latn",
+"base_term": "gadhedo"
+},
+{
+"term": "gadheda",
+"category": "insult",
+"severity": "low",
+"context_dependent": true,
+"replacement": "nasamajh",
+"language": "gu-Latn",
+"base_term": "gadhedo"
+},
+{
+"term": "gadhedi",
+"category": "insult",
+"severity": "low",
+"context_dependent": true,
+"replacement": "nasamajh",
+"language": "gu-Latn",
+"base_term": "gadhedo"
+},
+{
+"term": "gadhedaa",
+"category": "insult",
+"severity": "low",
+"context_dependent": true,
+"replacement": "nasamajh",
+"language": "gu-Latn",
+"base_term": "gadhedo"
+},
+{
+"term": "ggggadhedo",
+"category": "insult",
+"severity": "low",
+"context_dependent": true,
+"replacement": "nasamajh",
+"language": "gu-Latn",
+"base_term": "gadhedo"
+},
+{
+"term": "nalayak",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "bejavabdar",
+"language": "gu-Latn",
+"base_term": "nalayak"
+},
+{
+"term": "naalayak",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "bejavabdar",
+"language": "gu-Latn",
+"base_term": "nalayak"
+},
+{
+"term": "nalaayak",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "bejavabdar",
+"language": "gu-Latn",
+"base_term": "nalayak"
+},
+{
+"term": "chutiyo",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "nasamajh manas",
+"language": "gu-Latn",
+"base_term": "chutiyo"
+},
+{
+"term": "chutio",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "nasamajh manas",
+"language": "gu-Latn",
+"base_term": "chutiyo"
+},
+{
+"term": "chutiiiiiyo",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "nasamajh manas",
+"language": "gu-Latn",
+"base_term": "chutiyo"
+},
+{
+"term": "bhosdina",
+"category": "insult",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "gu-Latn",
+"base_term": "bhosdina"
+},
+{
+"term": "bhosadina",
+"category": "insult",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "gu-Latn",
+"base_term": "bhosdina"
+},
+{
+"term": "bhosdinu",
+"category": "insult",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "gu-Latn",
+"base_term": "bhosdina"
+},
+{
+"term": "bhosdi na",
+"category": "insult",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "gu-Latn",
+"base_term": "bhosdina"
+},
+{
+"term": "bhosdiiina",
+"category": "insult",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "gu-Latn",
+"base_term": "bhosdina"
+},
+{
+"term": "lodo",
+"category": "profanity",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "",
+"language": "gu-Latn",
+"base_term": "lodo"
+},
+{
+"term": "lodu",
+"category": "profanity",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "",
+"language": "gu-Latn",
+"base_term": "lodo"
+},
+{
+"term": "lowdo",
+"category": "profanity",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "",
+"language": "gu-Latn",
+"base_term": "lodo"
+},
+{
+"term": "lodaa",
+"category": "profanity",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "",
+"language": "gu-Latn",
+"base_term": "lodo"
+},
+{
+"term": "lllodo",
+"category": "profanity",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "",
+"language": "gu-Latn",
+"base_term": "lodo"
+},
+{
+"term": "bhadvo",
+"category": "insult",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "gu-Latn",
+"base_term": "bhadvo"
+},
+{
+"term": "bhadva",
+"category": "insult",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "gu-Latn",
+"base_term": "bhadvo"
+},
+{
+"term": "bhadvi",
+"category": "insult",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "gu-Latn",
+"base_term": "bhadvo"
+},
+{
+"term": "bhadwa",
+"category": "insult",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "gu-Latn",
+"base_term": "bhadvo"
+},
+{
+"term": "bhadddvo",
+"category": "insult",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "gu-Latn",
+"base_term": "bhadvo"
+},
+{
+"term": "rand",
+"category": "harassment",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "gu-Latn",
+"base_term": "rand"
+},
+{
+"term": "raand",
+"category": "harassment",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "gu-Latn",
+"base_term": "rand"
+},
+{
+"term": "randddd",
+"category": "harassment",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "gu-Latn",
+"base_term": "rand"
+},
+{
+"term": "tari maa ne",
+"category": "insult",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "gu-Latn",
+"base_term": "tari maa ne"
+},
+{
+"term": "tari ma ne",
+"category": "insult",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "gu-Latn",
+"base_term": "tari maa ne"
+},
+{
+"term": "tari maa na",
+"category": "insult",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "gu-Latn",
+"base_term": "tari maa ne"
+},
+{
+"term": "t-a-r-i-m-a-a-n-e",
+"category": "insult",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "gu-Latn",
+"base_term": "tari maa ne"
+},
+{
+"term": "ttttari maa ne",
+"category": "insult",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "gu-Latn",
+"base_term": "tari maa ne"
+},
+{
+"term": "buddhi vagar no",
+"category": "insult",
+"severity": "low",
+"context_dependent": false,
+"replacement": "thodo ochho samajhdar",
+"language": "gu-Latn",
+"base_term": "buddhi vagar no"
+},
+{
+"term": "buddhi vagar na",
+"category": "insult",
+"severity": "low",
+"context_dependent": false,
+"replacement": "thodo ochho samajhdar",
+"language": "gu-Latn",
+"base_term": "buddhi vagar no"
+},
+{
+"term": "akkal vagar no",
+"category": "insult",
+"severity": "low",
+"context_dependent": false,
+"replacement": "thodo ochho samajhdar",
+"language": "gu-Latn",
+"base_term": "buddhi vagar no"
+},
+{
+"term": "b.u.d.d.h.i.v.a.g.a.r.n.o",
+"category": "insult",
+"severity": "low",
+"context_dependent": false,
+"replacement": "thodo ochho samajhdar",
+"language": "gu-Latn",
+"base_term": "buddhi vagar no"
+},
+{
+"term": "buddhi vaaaagar no",
+"category": "insult",
+"severity": "low",
+"context_dependent": false,
+"replacement": "thodo ochho samajhdar",
+"language": "gu-Latn",
+"base_term": "buddhi vagar no"
+},
+{
+"term": "tane mari nakhish",
+"category": "threat",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "gu-Latn",
+"base_term": "tane mari nakhish"
+},
+{
+"term": "tane maari nakhish",
+"category": "threat",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "gu-Latn",
+"base_term": "tane mari nakhish"
+},
+{
+"term": "tane mari naakhish",
+"category": "threat",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "gu-Latn",
+"base_term": "tane mari nakhish"
+},
+{
+"term": "t-a-n-e-m-a-r-i-n-a-k-h-i-s-h",
+"category": "threat",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "gu-Latn",
+"base_term": "tane mari nakhish"
+},
+{
+"term": "tane mari nnnakhish",
+"category": "threat",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "gu-Latn",
+"base_term": "tane mari nakhish"
+},
+{
+"term": "taru mathu fodi nakhish",
+"category": "threat",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "gu-Latn",
+"base_term": "taru mathu fodi nakhish"
+},
+{
+"term": "taru maathu fodi nakhish",
+"category": "threat",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "gu-Latn",
+"base_term": "taru mathu fodi nakhish"
+},
+{
+"term": "mathu fodi nakhish",
+"category": "threat",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "gu-Latn",
+"base_term": "taru mathu fodi nakhish"
+},
+{
+"term": "t a r u m a t h u f o d i n a k h i s h",
+"category": "threat",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "gu-Latn",
+"base_term": "taru mathu fodi nakhish"
+},
+{
+"term": "taruuu mathu fodi nakhish",
+"category": "threat",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "gu-Latn",
+"base_term": "taru mathu fodi nakhish"
+},
+{
+"term": "tane joi laish",
+"category": "threat",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "",
+"language": "gu-Latn",
+"base_term": "tane joi laish"
+},
+{
+"term": "joi laish tane",
+"category": "threat",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "",
+"language": "gu-Latn",
+"base_term": "tane joi laish"
+},
+{
+"term": "tane jovi laish",
+"category": "threat",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "",
+"language": "gu-Latn",
+"base_term": "tane joi laish"
+},
+{
+"term": "t-a-n-e-j-o-i-l-a-i-s-h",
+"category": "threat",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "",
+"language": "gu-Latn",
+"base_term": "tane joi laish"
+},
+{
+"term": "tane joi laiiiiish",
+"category": "threat",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "",
+"language": "gu-Latn",
+"base_term": "tane joi laish"
+},
+{
+"term": "kida makoda",
+"category": "hate",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "gu-Latn",
+"base_term": "kida makoda"
+},
+{
+"term": "kida jeva",
+"category": "hate",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "gu-Latn",
+"base_term": "kida makoda"
+},
+{
+"term": "k.i.d.a.m.a.k.o.d.a",
+"category": "hate",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "gu-Latn",
+"base_term": "kida makoda"
+},
+{
+"term": "kiiiida makoda",
+"category": "hate",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "gu-Latn",
+"base_term": "kida makoda"
+},
+{
+"term": "ગાંડો",
+"category": "insult",
+"severity": "low",
+"context_dependent": true,
+"replacement": "નાસમજ",
+"language": "gu",
+"base_term": "ગાંડો"
+},
+{
+"term": "ગાંડી",
+"category": "insult",
+"severity": "low",
+"context_dependent": true,
+"replacement": "નાસમજ",
+"language": "gu",
+"base_term": "ગાંડો"
+},
+{
+"term": "ગધેડો",
+"category": "insult",
+"severity": "low",
+"context_dependent": true,
+"replacement": "નાસમજ",
+"language": "gu",
+"base_term": "ગધેડો"
+},
+{
+"term": "ગધેડા",
+"category": "insult",
+"severity": "low",
+"context_dependent": true,
+"replacement": "નાસમજ",
+"language": "gu",
+"base_term": "ગધેડો"
+},
+{
+"term": "ગધેડી",
+"category": "insult",
+"severity": "low",
+"context_dependent": true,
+"replacement": "નાસમજ",
+"language": "gu",
+"base_term": "ગધેડો"
+},
+{
+"term": "નાલાયક",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "બેજવાબદાર",
+"language": "gu",
+"base_term": "નાલાયક"
+},
+{
+"term": "ચુતિયો",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "નાસમજ માણસ",
+"language": "gu",
+"base_term": "ચુતિયો"
+},
+{
+"term": "ચુતિયા",
+"category": "insult",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "નાસમજ માણસ",
+"language": "gu",
+"base_term": "ચુતિયો"
+},
+{
+"term": "ભોસડીના",
+"category": "insult",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "gu",
+"base_term": "ભોસડીના"
+},
+{
+"term": "લોડો",
+"category": "profanity",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "",
+"language": "gu",
+"base_term": "લોડો"
+},
+{
+"term": "લોડા",
+"category": "profanity",
+"severity": "medium",
+"context_dependent": false,
+"replacement": "",
+"language": "gu",
+"base_term": "લોડો"
+},
+{
+"term": "ભડવો",
+"category": "insult",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "gu",
+"base_term": "ભડવો"
+},
+{
+"term": "ભડવા",
+"category": "insult",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "gu",
+"base_term": "ભડવો"
+},
+{
+"term": "રાંડ",
+"category": "harassment",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "gu",
+"base_term": "રાંડ"
+},
+{
+"term": "તને મારી નાખીશ",
+"category": "threat",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "gu",
+"base_term": "તને મારી નાખીશ"
+},
+{
+"term": "મારી નાખીશ",
+"category": "threat",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "gu",
+"base_term": "તને મારી નાખીશ"
+},
+{
+"term": "તારું માથું ફોડી નાખીશ",
+"category": "threat",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "gu",
+"base_term": "તારું માથું ફોડી નાખીશ"
+},
+{
+"term": "માથું ફોડી નાખીશ",
+"category": "threat",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "gu",
+"base_term": "તારું માથું ફોડી નાખીશ"
+},
+{
+"term": "કીડા મકોડા",
+"category": "hate",
+"severity": "high",
+"context_dependent": false,
+"replacement": "",
+"language": "gu",
+"base_term": "કીડા મકોડા"
+}
+]
+}

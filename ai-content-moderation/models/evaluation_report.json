@@ -1,0 +1,632 @@
+{
+  "created_at": "2026-10-31T12:07:42+00:00",
+  "dataset": "datasets\\multilingual_content_moderation_dataset.xlsx",
+  "rows_used": 2406,
+  "split": {
+    "train": 1717,
+    "validation": 288,
+    "test": 401,
+    "method": "GroupShuffleSplit by template_group (70/15/15)"
+  },
+  "model": {
+    "vectorizer": {
+      "analyzer": "char_wb",
+      "ngram_range": [
+        2,
+        5
+      ],
+      "min_df": 2,
+      "max_features": 40000,
+      "sublinear_tf": true,
+      "lowercase": false
+    },
+    "classifier": "LogisticRegression(C=30.0, class_weight=balanced)",
+    "exported_features": 12029
+  },
+  "thresholds": {
+    "flag": 0.3,
+    "confident": 0.3,
+    "context": 0.5,
+    "model_only": 0.5
+  },
+  "deployed_policy": {
+    "model_only_min": 0.5,
+    "min_words_for_model": 3,
+    "target_precision": 0.95
+  },
+  "results": {
+    "word_list_baseline": {
+      "binary": {
+        "accuracy": 0.8006042296072508,
+        "precision": 1.0,
+        "recall": 0.38317757009345793,
+        "f1": 0.5540540540540541,
+        "confusion_matrix": [
+          [
+            224,
+            0
+          ],
+          [
+            66,
+            41
+          ]
+        ]
+      },
+      "category": {
+        "accuracy": 0.8006042296072508,
+        "macro_f1": 0.5433892177943006,
+        "confusion_matrix": [
+          [
+            224,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            4,
+            2,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            14,
+            0,
+            26,
+            0,
+            0,
+            0
+          ],
+          [
+            21,
+            0,
+            0,
+            5,
+            0,
+            0
+          ],
+          [
+            9,
+            0,
+            0,
+            0,
+            4,
+            0
+          ],
+          [
+            18,
+            0,
+            0,
+            0,
+            0,
+            4
+          ]
+        ],
+        "report": {
+          "clean": {
+            "precision": 0.7724137931034483,
+            "recall": 1.0,
+            "f1-score": 0.8715953307392996,
+            "support": 224.0
+          },
+          "profanity": {
+            "precision": 1.0,
+            "recall": 0.3333333333333333,
+            "f1-score": 0.5,
+            "support": 6.0
+          },
+          "insult": {
+            "precision": 1.0,
+            "recall": 0.65,
+            "f1-score": 0.7878787878787878,
+            "support": 40.0
+          },
+          "harassment": {
+            "precision": 1.0,
+            "recall": 0.19230769230769232,
+            "f1-score": 0.3225806451612903,
+            "support": 26.0
+          },
+          "threat": {
+            "precision": 1.0,
+            "recall": 0.3076923076923077,
+            "f1-score": 0.47058823529411764,
+            "support": 13.0
+          },
+          "hate": {
+            "precision": 1.0,
+            "recall": 0.18181818181818182,
+            "f1-score": 0.3076923076923077,
+            "support": 22.0
+          },
+          "accuracy": 0.8006042296072508,
+          "macro avg": {
+            "precision": 0.9620689655172413,
+            "recall": 0.4441919191919192,
+            "f1-score": 0.5433892177943006,
+            "support": 331.0
+          },
+          "weighted avg": {
+            "precision": 0.8459839566621523,
+            "recall": 0.8006042296072508,
+            "f1-score": 0.7583881577129984,
+            "support": 331.0
+          }
+        }
+      }
+    },
+    "classifier": {
+      "binary": {
+        "accuracy": 0.9033232628398792,
+        "precision": 0.8048780487804879,
+        "recall": 0.9252336448598131,
+        "f1": 0.8608695652173913,
+        "confusion_matrix": [
+          [
+            200,
+            24
+          ],
+          [
+            8,
+            99
+          ]
+        ]
+      },
+      "category": {
+        "accuracy": 0.8429003021148036,
+        "macro_f1": 0.7375442342408539,
+        "confusion_matrix": [
+          [
+            200,
+            0,
+            16,
+            0,
+            6,
+            2
+          ],
+          [
+            1,
+            4,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            5,
+            1,
+            33,
+            0,
+            0,
+            1
+          ],
+          [
+            1,
+            0,
+            4,
+            14,
+            7,
+            0
+          ],
+          [
+            0,
+            0,
+            1,
+            0,
+            12,
+            0
+          ],
+          [
+            1,
+            0,
+            5,
+            0,
+            0,
+            16
+          ]
+        ],
+        "report": {
+          "clean": {
+            "precision": 0.9615384615384616,
+            "recall": 0.8928571428571429,
+            "f1-score": 0.9259259259259259,
+            "support": 224.0
+          },
+          "profanity": {
+            "precision": 0.8,
+            "recall": 0.6666666666666666,
+            "f1-score": 0.7272727272727273,
+            "support": 6.0
+          },
+          "insult": {
+            "precision": 0.55,
+            "recall": 0.825,
+            "f1-score": 0.66,
+            "support": 40.0
+          },
+          "harassment": {
+            "precision": 1.0,
+            "recall": 0.5384615384615384,
+            "f1-score": 0.7,
+            "support": 26.0
+          },
+          "threat": {
+            "precision": 0.48,
+            "recall": 0.9230769230769231,
+            "f1-score": 0.631578947368421,
+            "support": 13.0
+          },
+          "hate": {
+            "precision": 0.8421052631578947,
+            "recall": 0.7272727272727273,
+            "f1-score": 0.7804878048780488,
+            "support": 22.0
+          },
+          "accuracy": 0.8429003021148036,
+          "macro avg": {
+            "precision": 0.7722739541160593,
+            "recall": 0.7622224997224998,
+            "f1-score": 0.7375442342408539,
+            "support": 331.0
+          },
+          "weighted avg": {
+            "precision": 0.8850481304353146,
+            "recall": 0.8429003021148036,
+            "f1-score": 0.8512154132753788,
+            "support": 331.0
+          }
+        }
+      }
+    },
+    "combined": {
+      "binary": {
+        "accuracy": 0.9214501510574018,
+        "precision": 0.9263157894736842,
+        "recall": 0.822429906542056,
+        "f1": 0.8712871287128713,
+        "confusion_matrix": [
+          [
+            217,
+            7
+          ],
+          [
+            19,
+            88
+          ]
+        ]
+      },
+      "category": {
+        "accuracy": 0.8851963746223565,
+        "macro_f1": 0.77705392594289,
+        "confusion_matrix": [
+          [
+            217,
+            0,
+            5,
+            0,
+            2,
+            0
+          ],
+          [
+            1,
+            4,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            7,
+            1,
+            32,
+            0,
+            0,
+            0
+          ],
+          [
+            4,
+            0,
+            3,
+            14,
+            5,
+            0
+          ],
+          [
+            2,
+            0,
+            0,
+            0,
+            11,
+            0
+          ],
+          [
+            5,
+            0,
+            2,
+            0,
+            0,
+            15
+          ]
+        ],
+        "report": {
+          "clean": {
+            "precision": 0.9194915254237288,
+            "recall": 0.96875,
+            "f1-score": 0.9434782608695652,
+            "support": 224.0
+          },
+          "profanity": {
+            "precision": 0.8,
+            "recall": 0.6666666666666666,
+            "f1-score": 0.7272727272727273,
+            "support": 6.0
+          },
+          "insult": {
+            "precision": 0.7441860465116279,
+            "recall": 0.8,
+            "f1-score": 0.7710843373493976,
+            "support": 40.0
+          },
+          "harassment": {
+            "precision": 1.0,
+            "recall": 0.5384615384615384,
+            "f1-score": 0.7,
+            "support": 26.0
+          },
+          "threat": {
+            "precision": 0.6111111111111112,
+            "recall": 0.8461538461538461,
+            "f1-score": 0.7096774193548387,
+            "support": 13.0
+          },
+          "hate": {
+            "precision": 1.0,
+            "recall": 0.6818181818181818,
+            "f1-score": 0.8108108108108109,
+            "support": 22.0
+          },
+          "accuracy": 0.8851963746223565,
+          "macro avg": {
+            "precision": 0.8457981138410778,
+            "recall": 0.7503083721833722,
+            "f1-score": 0.7770539259428899,
+            "support": 331.0
+          },
+          "weighted avg": {
+            "precision": 0.8957038912381415,
+            "recall": 0.8851963746223565,
+            "f1-score": 0.8816005576490805,
+            "support": 331.0
+          }
+        }
+      }
+    }
+  },
+  "unseen_words": {
+    "n": 69,
+    "classifier_recall": 1.0,
+    "deployed_recall": 0.028985507246376812
+  },
+  "per_language": {
+    "en": {
+      "n": 95,
+      "accuracy": 0.8526315789473684,
+      "precision": 0.782608695652174,
+      "recall": 0.6666666666666666,
+      "f1": 0.72
+    },
+    "en-gu": {
+      "n": 23,
+      "accuracy": 1.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "en-gu-script": {
+      "n": 2,
+      "note": "too few test examples for a reliable estimate"
+    },
+    "en-hi-gu": {
+      "n": 2,
+      "note": "too few test examples for a reliable estimate"
+    },
+    "gu": {
+      "n": 49,
+      "accuracy": 0.9591836734693877,
+      "precision": 1.0,
+      "recall": 0.8666666666666667,
+      "f1": 0.9285714285714286
+    },
+    "gu-Latn": {
+      "n": 53,
+      "accuracy": 0.9622641509433962,
+      "precision": 0.9565217391304348,
+      "recall": 0.9565217391304348,
+      "f1": 0.9565217391304348
+    },
+    "hi": {
+      "n": 45,
+      "accuracy": 0.8444444444444444,
+      "precision": 0.9473684210526315,
+      "recall": 0.75,
+      "f1": 0.8372093023255814
+    },
+    "hi-Latn": {
+      "n": 36,
+      "accuracy": 0.9722222222222222,
+      "precision": 1.0,
+      "recall": 0.9090909090909091,
+      "f1": 0.9523809523809523
+    },
+    "hinglish": {
+      "n": 26,
+      "accuracy": 1.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    }
+  },
+  "false_positives": [
+    {
+      "text": "Share karva badal aabhar. Aavti meeting ma aa vishe vaat kariye. meeting kone aavu banavyu? Ema sudharo joie. Share karva badal aabhar.",
+      "language_code": "gu-Latn",
+      "pred": "threat",
+      "p_bad": 0.5
+    },
+    {
+      "text": "Are you coming for the project tomorrow?",
+      "language_code": "en",
+      "pred": "insult",
+      "p_bad": 0.585
+    },
+    {
+      "text": "Are you coming for the presentation tomorrow?",
+      "language_code": "en",
+      "pred": "insult",
+      "p_bad": 0.515
+    },
+    {
+      "text": "Are you coming for the update tomorrow?",
+      "language_code": "en",
+      "pred": "insult",
+      "p_bad": 0.605
+    },
+    {
+      "text": "Are you coming for the plan tomorrow?",
+      "language_code": "en",
+      "pred": "insult",
+      "p_bad": 0.552
+    },
+    {
+      "text": "Are you coming for your code tomorrow?",
+      "language_code": "en",
+      "pred": "threat",
+      "p_bad": 0.743
+    },
+    {
+      "text": "सबका सप्ताहांत अच्छा रहा होगा। मेरा कुत्ता बहुत प्यारा है, रोज़ सुबह घूमने जाता है। सबका सप्ताहांत अच्छा रहा होगा।",
+      "language_code": "hi",
+      "pred": "insult",
+      "p_bad": 0.515
+    }
+  ],
+  "false_negatives": [
+    {
+      "text": "Stop acting like a d1ck*ead and fix this group chat.",
+      "language_code": "en",
+      "category": "insult",
+      "p_bad": 0.211
+    },
+    {
+      "text": "Stop acting like a jerkkk and fix the match.",
+      "language_code": "en",
+      "category": "insult",
+      "p_bad": 0.223
+    },
+    {
+      "text": "Stop acting like a baste*d and fix the delivery.",
+      "language_code": "en",
+      "category": "insult",
+      "p_bad": 0.126
+    },
+    {
+      "text": "Stop acting like a idiat and fix the plan.",
+      "language_code": "en",
+      "category": "insult",
+      "p_bad": 0.412
+    },
+    {
+      "text": "કયા ભોસડીના એ રિપોર્ટ આવું બનાવ્યું?",
+      "language_code": "gu",
+      "category": "insult",
+      "p_bad": 0.5
+    },
+    {
+      "text": "this group chat was a load of s*it honestly.",
+      "language_code": "en",
+      "category": "profanity",
+      "p_bad": 0.034
+    },
+    {
+      "text": "एक और कमेंट किया तो हाथ पैर तोड़ दूंगा।",
+      "language_code": "hi",
+      "category": "threat",
+      "p_bad": 0.424
+    },
+    {
+      "text": "ye bahar wale insaan kehlane layak nahi.",
+      "language_code": "hi-Latn",
+      "category": "hate",
+      "p_bad": 0.475
+    },
+    {
+      "text": "उस धर्म के लोग इंसान कहलाने लायक नहीं।",
+      "language_code": "hi",
+      "category": "hate",
+      "p_bad": 0.373
+    },
+    {
+      "text": "ये बाहर वाले इंसान कहलाने लायक नहीं।",
+      "language_code": "hi",
+      "category": "hate",
+      "p_bad": 0.22
+    },
+    {
+      "text": "Everyone agrees, everyone in this group hates you.",
+      "language_code": "en",
+      "category": "harassment",
+      "p_bad": 0.399
+    },
+    {
+      "text": "Everyone agrees, you should just disappear.",
+      "language_code": "en",
+      "category": "harassment",
+      "p_bad": 0.47
+    },
+    {
+      "text": "Let's discuss this in the next meeting. The weather has been great lately. Stop acting like a d1ck*ead and fix this group chat. I hope everyone had a good weekend.",
+      "language_code": "en",
+      "category": "insult",
+      "p_bad": 0.315
+    },
+    {
+      "text": "अगली मीटिंग में इस पर बात करते हैं। उस समुदाय के लोग इंसान कहलाने लायक नहीं।",
+      "language_code": "hi",
+      "category": "hate",
+      "p_bad": 0.423
+    },
+    {
+      "text": "Aavti meeting ma aa vishe vaat kariye. Sambhal, group chhodi de, badha tarathi pareshan che. Badhano weekend saro gayo hase.",
+      "language_code": "gu-Latn",
+      "category": "harassment",
+      "p_bad": 0.333
+    },
+    {
+      "text": "सबका सप्ताहांत अच्छा रहा होगा। अगली मीटिंग में इस पर बात करते हैं। ये बाहर वाले इंसान कहलाने लायक नहीं। अगली मीटिंग में इस पर बात करते हैं।",
+      "language_code": "hi",
+      "category": "hate",
+      "p_bad": 0.344
+    },
+    {
+      "text": "આવતી મીટિંગમાં આ વિશે વાત કરીએ. બધાનો સપ્તાહાંત સારો ગયો હશે. તું સાવ ભોસડીના છે, ઓર્ડર બગાડી નાખ્યું.",
+      "language_code": "gu",
+      "category": "insult",
+      "p_bad": 0.428
+    },
+    {
+      "text": "सबका सप्ताहांत अच्छा रहा होगा। अगली मीटिंग में इस पर बात करते हैं। एक और कमेंट किया तो हाथ पैर तोड़ दूंगा। अगली मीटिंग में इस पर बात करते हैं।",
+      "language_code": "hi",
+      "category": "threat",
+      "p_bad": 0.383
+    },
+    {
+      "text": "The weather has been great lately. Thanks for sharing your thoughts. Everyone agrees, you should just disappear.",
+      "language_code": "en",
+      "category": "harassment",
+      "p_bad": 0.381
+    }
+  ]
+}

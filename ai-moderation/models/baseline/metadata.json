@@ -1,0 +1,17 @@
+{
+  "name": "tfidf-char-logreg",
+  "C": 10.0,
+  "validation_macro_f1": 0.7084,
+  "labels": [
+    "CLEAN",
+    "HARASSMENT",
+    "HATE_SPEECH",
+    "MILD_PROFANITY",
+    "PERSONAL_ABUSE",
+    "THREAT",
+    "VULGAR"
+  ],
+  "train_rows": 1900,
+  "train_seconds": 0.8,
+  "note": "Trained on the training split only; the deployed model is chosen by evaluation/evaluate.py."
+}
