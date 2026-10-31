@@ -3,7 +3,8 @@ import http from 'node:http';
 import { io as connectClient } from 'socket.io-client';
 import app from '../src/app.js';
 import { initSocket, closeSocket } from '../src/socket/index.js';
-import { allowedOrigins, isOriginAllowed } from '../src/config/cors.js';
+import { jest } from '@jest/globals';
+import { allowedOrigins, describeCorsConfig, isOriginAllowed } from '../src/config/cors.js';
 import { api, auth, resetDatabase, closeDatabase, createUser } from './helpers.js';
 
 const LIVE_FRONTEND = 'https://my-frontend.example.com';
@@ -65,6 +66,50 @@ describe('allowed origins configuration', () => {
   });
 });
 
+describe('FRONTEND_URL parsing (common misconfigurations)', () => {
+  const withEnv = (value, fn) => {
+    const saved = process.env.FRONTEND_URL;
+    process.env.FRONTEND_URL = value;
+    try {
+      fn();
+    } finally {
+      process.env.FRONTEND_URL = saved;
+    }
+  };
+
+  test('quotes, paths, trailing slashes, ports and case are reduced to the origin', () => {
+    withEnv(`"https://App.Example.com/login", 'http://localhost:5173/',https://other.example.com:8443/`, () => {
+      expect(allowedOrigins()).toEqual(['https://app.example.com', 'http://localhost:5173', 'https://other.example.com:8443']);
+      expect(isOriginAllowed('https://app.example.com')).toBe(true);
+      expect(isOriginAllowed('https://other.example.com')).toBe(false); // port is part of the origin
+      expect(isOriginAllowed('http://app.example.com')).toBe(false); // so is the scheme
+    });
+  });
+
+  test('invalid entries are ignored and reported', () => {
+    withEnv('my-frontend.onrender.com, https://ok.example.com, ftp://files.example.com', () => {
+      const config = describeCorsConfig();
+      expect(config.origins).toEqual(['https://ok.example.com']);
+      expect(config.invalid).toEqual(['my-frontend.onrender.com', 'ftp://files.example.com']);
+      expect(config.source).toBe('FRONTEND_URL');
+    });
+  });
+
+  test('a rejected origin is logged once, with the configured list and no secrets', async () => {
+    const warn = jest.spyOn(console, 'warn').mockImplementation(() => {});
+    try {
+      await preflight('https://unlisted-frontend.example.org');
+      await preflight('https://unlisted-frontend.example.org');
+      const lines = warn.mock.calls.flat().filter((l) => String(l).includes('unlisted-frontend'));
+      expect(lines).toHaveLength(1);
+      expect(lines[0]).toContain('Allowed origins: https://my-frontend.example.com, http://localhost:3000');
+      expect(lines[0]).not.toContain(process.env.JWT_SECRET);
+    } finally {
+      warn.mockRestore();
+    }
+  });
+});
+
 describe('preflight (OPTIONS)', () => {
   test.each([LIVE_FRONTEND, 'http://localhost:3000', 'http://localhost:5173'])('%s is allowed', async (origin) => {
     const res = await preflight(origin);
@@ -88,7 +133,7 @@ describe('preflight (OPTIONS)', () => {
       const res = await preflight(origin);
       expect(res.status).toBe(403);
       expect(res.headers['access-control-allow-origin']).toBeUndefined();
-      expect(res.body.message).toBe('Origin not allowed by CORS policy');
+      expect(res.body).toMatchObject({ code: 'CORS_ORIGIN_NOT_ALLOWED', message: `Origin ${origin} is not allowed by the CORS policy` });
     }
   });
 });
