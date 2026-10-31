@@ -6,8 +6,7 @@ import { sequelize } from './src/models/index.js';
 import { createMigrator } from './src/database/migrator.js';
 import { initSocket, closeSocket } from './src/socket/index.js';
 import { checkEmailTransport } from './src/services/emailService.js';
-import { moderationHealth } from './src/services/moderationClient.js';
-import { isAIConfigured } from './src/services/aiService.js';
+import { moderationHealth } from './src/services/moderationService.js';
 import { describeCorsConfig } from './src/config/cors.js';
 
 const PORT = process.env.PORT || 5000;
@@ -29,13 +28,12 @@ const startServer = async () => {
     if (!cors.origins.length) console.warn('[cors] No browser origin is allowed. Set FRONTEND_URL to your frontend URL(s), comma-separated.');
 
     await checkEmailTransport();
-    if ((await moderationHealth()).available) {
-      console.log('[moderation] Local moderation service is available.');
+    // Loads the moderation model once, before the first request
+    const moderation = moderationHealth();
+    if (moderation.available) {
+      console.log(`[moderation] Local model loaded in-process: ${moderation.model} (${moderation.version}, ${moderation.load_ms} ms)`);
     } else {
-      console.warn('[moderation] Local moderation service is NOT reachable. Posts and comments will be refused (503) until it runs: npm run moderation');
-    }
-    if (!isAIConfigured()) {
-      console.warn('[ai] GEMINI_API_KEY is not set. AI endpoints will respond with 503.');
+      console.error('[moderation] Local model could not be loaded. Posts and comments will be refused (503).');
     }
 
     // Express and Socket.IO share one HTTP server

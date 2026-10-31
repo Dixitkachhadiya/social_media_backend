@@ -1,47 +1,41 @@
 import { matchedData } from 'express-validator';
 import { Comment, User } from '../models/index.js';
-import { generatePost, improvePost, summarizeDiscussion, summarizeText, SUMMARY_LIMITS } from '../services/aiService.js';
+import AppError from '../utils/AppError.js';
 import { findAccessiblePost } from '../services/postService.js';
-import { checkContent, BLOCKED_MESSAGE, CLEAN_MESSAGE, UNCERTAIN_MESSAGE } from '../services/moderationClient.js';
+import { checkContent, BLOCKED_MESSAGE, CLEAN_MESSAGE, UNCERTAIN_MESSAGE } from '../services/moderationService.js';
+import { MIN_SENTENCES, MIN_WORDS, SUMMARIZER, summarizeDiscussion, summarizeText } from '../ai/summarization/summarizer.js';
 
-// AI output is returned as a suggestion only; publishing is a separate, explicit POST /api/posts
-const NOT_PUBLISHED_NOTE = 'Generated content is not published. Review it, then create a post with POST /api/posts.';
+// Summaries are suggestions only; publishing is a separate, explicit POST /api/posts
+const NOT_PUBLISHED_NOTE = 'Summaries are not published. Review the summary, then create a post with POST /api/posts.';
+// Comments considered for a discussion summary (most recent)
+const MAX_DISCUSSION_COMMENTS = 100;
 
-// POST /api/ai/generate-post  { topic, tone? }
-export const generatePostHandler = async (req, res) => {
-  const { topic, tone = 'professional' } = matchedData(req);
-  const { text, provider, model } = await generatePost({ topic, tone });
-
-  res.status(200).json({
-    success: true,
-    data: { content: text, topic, tone },
-    meta: { provider, model, published: false, note: NOT_PUBLISHED_NOTE },
-  });
-};
-
-// POST /api/ai/improve-post  { content }
-export const improvePostHandler = async (req, res) => {
-  const { content } = matchedData(req);
-  const { text, provider, model } = await improvePost({ content });
-
-  res.status(200).json({
-    success: true,
-    data: { original: content, improved: text },
-    meta: { provider, model, published: false, note: NOT_PUBLISHED_NOTE },
-  });
-};
+// ---------- Summarization (local extractive model, no external AI) ----------
 
 // POST /api/ai/summarize  { content, length? }  -> summary of the given text
 //                         { postId }            -> summary of a post's discussion (comments)
 export const summarizeHandler = async (req, res) => {
   const { postId, content, length = 'medium' } = matchedData(req);
+  const meta = { ai_generated: true, method: SUMMARIZER.method, model: SUMMARIZER.name };
 
   if (content !== undefined) {
-    const { text, provider, model } = await summarizeText({ content, length });
+    const result = summarizeText(content, length);
+    if (result.tooShort) {
+      throw new AppError(`This text is too short to summarize. Write at least ${MIN_SENTENCES} sentences (${MIN_WORDS}+ words).`, 422, {
+        code: 'TEXT_TOO_SHORT',
+      });
+    }
     return res.status(200).json({
       success: true,
-      data: { summary: text, length, original_length: content.length, summary_length: text.length },
-      meta: { ai_generated: true, provider, model, published: false, note: NOT_PUBLISHED_NOTE },
+      data: {
+        summary: result.summary,
+        length,
+        original_length: content.length,
+        summary_length: result.summary.length,
+        sentences_total: result.sentences_total,
+        sentences_selected: result.sentences_selected,
+      },
+      meta: { ...meta, published: false, note: NOT_PUBLISHED_NOTE },
     });
   }
 
@@ -50,7 +44,6 @@ export const summarizeHandler = async (req, res) => {
 
   const totalComments = await Comment.count({ where: { post_id: post.id } });
 
-  // No discussion: answer directly without spending AI quota
   if (totalComments === 0) {
     return res.status(200).json({
       success: true,
@@ -59,25 +52,20 @@ export const summarizeHandler = async (req, res) => {
     });
   }
 
-  // Most recent comments (bounded), presented to the model in chronological order
+  // Most recent comments (bounded), summarized in chronological order
   const recent = await Comment.findAll({
     where: { post_id: post.id },
     include: [{ model: User, as: 'author', attributes: ['username'], where: { is_active: true }, required: true }],
     order: [['created_at', 'DESC']],
-    limit: SUMMARY_LIMITS.maxComments,
+    limit: MAX_DISCUSSION_COMMENTS,
   });
   const comments = recent.reverse().map((c) => ({ author: c.author.username, content: c.content }));
-
-  const { commentsIncluded, result } = summarizeDiscussion({
-    post: { author: post.author.username, content: post.content },
-    comments,
-  });
-  const { text, provider, model } = await result;
+  const { summary, points } = summarizeDiscussion({ post: { author: post.author.username, content: post.content }, comments });
 
   res.status(200).json({
     success: true,
-    data: { post_id: post.id, summary: text, comments_total: totalComments, comments_included: commentsIncluded },
-    meta: { ai_generated: true, provider, model },
+    data: { post_id: post.id, summary, points, comments_total: totalComments, comments_included: comments.length },
+    meta,
   });
 };
 

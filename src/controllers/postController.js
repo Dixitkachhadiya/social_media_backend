@@ -3,7 +3,7 @@ import { Post } from '../models/index.js';
 import AppError from '../utils/AppError.js';
 import { getPagination, paginationMeta } from '../utils/pagination.js';
 import { listPosts, getPostDetails } from '../services/postService.js';
-import { enforceModeration } from '../services/moderationClient.js';
+import { enforceModeration } from '../services/moderationService.js';
 
 // POST /api/posts
 export const createPost = async (req, res) => {

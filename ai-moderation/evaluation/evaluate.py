@@ -2,7 +2,8 @@
 Evaluates both models with the full moderation policy, tunes thresholds on VALIDATION data, selects the
 deployed model and writes models/deployment.json plus evaluation/report.{md,json}.
 
-    python evaluation/evaluate.py
+    python evaluation/evaluate.py                    # baseline and, if present, the transformer
+    python evaluation/evaluate.py --models baseline  # baseline only
 
 Honesty rules
   - Thresholds and model selection use the validation split only; the test split is reported, never tuned on.
@@ -182,19 +183,19 @@ def write_report(report):
     L += [
         f"| Raw classifier: 7-label accuracy | {cols(lambda r: pct(r['raw_classifier_test']['accuracy_7_labels']))} |",
         f"| Raw classifier: 7-label macro F1 | {cols(lambda r: pct(r['raw_classifier_test']['macro_f1_7_labels']))} |",
-        f"| Thresholds (block / uncertain) | {cols(lambda r: f\"{r['thresholds']['block']} / {r['thresholds']['uncertain']}\")} |",
+        f"| Thresholds (block / uncertain) | {cols(lambda r: "{} / {}".format(r['thresholds']['block'], r['thresholds']['uncertain']))} |",
         f"| **Policy on sentences: precision** | {cols(lambda r: pct(r['policy_test']['blocked_incl_uncertain']['precision']))} |",
         f"| **Policy on sentences: recall** | {cols(lambda r: pct(r['policy_test']['blocked_incl_uncertain']['recall']))} |",
         f"| **Policy on sentences: F1** | {cols(lambda r: pct(r['policy_test']['blocked_incl_uncertain']['f1']))} |",
         f"| Policy accuracy | {cols(lambda r: pct(r['policy_test']['blocked_incl_uncertain']['accuracy']))} |",
         f"| Share held as 'uncertain' | {cols(lambda r: pct(r['policy_test']['uncertain_share']))} |",
         f"| Category accuracy (blocked toxic) | {cols(lambda r: pct(r['policy_test']['category_accuracy_on_blocked_toxic']))} |",
-        f"| False positives / false negatives | {cols(lambda r: f\"{r['false_positive_count']} / {r['false_negative_count']}\")} |",
+        f"| False positives / false negatives | {cols(lambda r: "{} / {}".format(r['false_positive_count'], r['false_negative_count']))} |",
         f"| Unseen single words blocked | {cols(lambda r: pct(r['unseen_single_words']['blocked_share']))} |",
         f"| Probe set (n={report['models'][kinds[0]]['probe']['n']}): accuracy | {cols(lambda r: pct(r['probe']['accuracy']))} |",
         f"| Probe: clean texts blocked | {cols(lambda r: str(len(r['probe']['clean_blocked'])))} |",
         f"| Probe: toxic texts allowed | {cols(lambda r: str(len(r['probe']['toxic_allowed'])))} |",
-        f"| Latency per text (median / p95) | {cols(lambda r: f\"{r['latency_ms']['median']:.0f} / {r['latency_ms']['p95']:.0f} ms\")} |",
+        f"| Latency per text (median / p95) | {cols(lambda r: "{:.0f} / {:.0f} ms".format(r['latency_ms']['median'], r['latency_ms']['p95']))} |",
         "",
         "\"Policy\" = what the service does: word list (training words only during evaluation) + model + thresholds; "
         "a text counts as blocked when the decision is `block` or `uncertain`.", "",
@@ -224,10 +225,15 @@ def write_report(report):
 
 
 def main():
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--models", nargs="+", choices=["baseline", "transformer"], help="models to evaluate (default: all available)")
+    args = parser.parse_args()
     df = load_dataset(verbose=False)
     train, val, test = group_split(df)
     probe = json.loads((OUT / "probe_set.json").read_text(encoding="utf-8"))["examples"]
-    kinds = ["baseline"] + (["transformer"] if (MODELS / "transformer" / "config.json").exists() else [])
+    kinds = args.models or ["baseline"] + (["transformer"] if (MODELS / "transformer" / "config.json").exists() else [])
     models = {}
     for kind in kinds:
         print(f"Evaluating {kind}...", flush=True)

@@ -1,7 +1,7 @@
-// Mocked moderation inference for automated tests: same response shape as the local FastAPI service
-// (ai-moderation/inference/moderator.py), decided by a tiny fixed word list instead of the real model.
-// The real model is exercised separately by tests/moderation.integration.test.js and ai-moderation/tests.
-import { setModerationTransport } from '../src/services/moderationClient.js';
+// Mocked moderation for automated tests: same result shape as the local model (src/ai/moderation/moderator.js),
+// decided by a tiny fixed word list instead of the real model.
+// The real model is exercised separately by tests/moderation.integration.test.js and tests/aiModel.test.js.
+import { setModerationEngine } from '../src/services/moderationService.js';
 
 const FAKE_TERMS = [
   ['jaan se maar', 'THREAT', 'high'],
@@ -51,4 +51,4 @@ export const fakeModeration = (text) => {
   };
 };
 
-export const useFakeModeration = () => setModerationTransport(async (text) => fakeModeration(text));
+export const useFakeModeration = () => setModerationEngine(async (text) => fakeModeration(text));

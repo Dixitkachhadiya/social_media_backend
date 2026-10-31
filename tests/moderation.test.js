@@ -1,9 +1,9 @@
 // Mandatory moderation of posts and comments, with MOCKED inference (tests/mockModeration.js).
-// The real local model is tested by tests/moderation.integration.test.js and ai-moderation/tests.
+// The real local model is tested by tests/moderation.integration.test.js and tests/aiModel.test.js.
 import { jest } from '@jest/globals';
 import { api, auth, resetDatabase, closeDatabase, createUser, createPost } from './helpers.js';
 import { Post, Comment } from '../src/models/index.js';
-import { setModerationTransport } from '../src/services/moderationClient.js';
+import { setModerationEngine, checkContent } from '../src/services/moderationService.js';
 import { fakeModeration, useFakeModeration } from './mockModeration.js';
 
 let alice;
@@ -27,8 +27,8 @@ beforeAll(async () => {
 });
 beforeEach(() => {
   seen.length = 0;
-  // Record what the backend sends to the inference service, then answer like the fake
-  setModerationTransport(async (text) => {
+  // Record what the backend sends to the model, then answer like the fake
+  setModerationEngine(async (text) => {
     seen.push(text);
     return fakeModeration(text);
   });
@@ -152,7 +152,7 @@ describe('bypass and trust', () => {
   });
 });
 
-describe('18. inference service unavailable (fail closed)', () => {
+describe('18. moderation model unavailable (fail closed)', () => {
   let errorSpy;
   beforeEach(() => {
     errorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
@@ -160,11 +160,11 @@ describe('18. inference service unavailable (fail closed)', () => {
   afterEach(() => errorSpy.mockRestore());
 
   test.each([
-    ['connection refused', async () => { throw Object.assign(new TypeError('fetch failed'), { cause: { code: 'ECONNREFUSED' } }); }],
-    ['timeout', async () => { throw Object.assign(new Error('The operation was aborted due to timeout'), { name: 'TimeoutError' }); }],
-    ['malformed response', async () => ({ unexpected: true })],
+    ['model not loaded', () => { throw new Error('model not loaded'); }],
+    ['inference error', async () => { throw new RangeError('Invalid array length'); }],
+    ['malformed result', async () => ({ unexpected: true })],
   ])('%s: posts and comments are refused with 503 and nothing is saved', async (_, failure) => {
-    setModerationTransport(failure);
+    setModerationEngine(failure);
     const post = await Post.findOne();
     const [posts, comments] = [await Post.count(), await Comment.count()];
 
@@ -177,20 +177,13 @@ describe('18. inference service unavailable (fail closed)', () => {
     expect([await Post.count(), await Comment.count()]).toEqual([posts, comments]);
     // A safe technical log line, never the content
     const logged = errorSpy.mock.calls.flat().join(' ');
-    expect(logged).toMatch(/\[moderation\] Service unavailable/);
+    expect(logged).toMatch(/\[moderation\] Check failed/);
     expect(logged).not.toMatch(/perfectly normal/);
   });
 
-  test('a real network failure to an unreachable port is also refused (no mock)', async () => {
-    setModerationTransport(null);
-    const previous = process.env.MODERATION_SERVICE_URL;
-    process.env.MODERATION_SERVICE_URL = 'http://127.0.0.1:9'; // nothing listens here
-    try {
-      const res = await publish(alice.token, 'A perfectly normal post');
-      expect(res.status).toBe(503);
-    } finally {
-      process.env.MODERATION_SERVICE_URL = previous;
-    }
+  test('the real model refuses input it cannot check (no mock): 503, not a silent pass', async () => {
+    setModerationEngine(null);
+    await expect(checkContent('a'.repeat(10001))).rejects.toMatchObject({ statusCode: 503, code: 'MODERATION_UNAVAILABLE' });
   });
 });
 

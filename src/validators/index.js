@@ -153,21 +153,6 @@ export const recentUsersRules = [
 
 // ---------- AI ----------
 
-export const AI_TONES = ['professional', 'casual', 'friendly', 'humorous', 'inspirational', 'informative'];
-
-export const generatePostRules = [
-  text('topic', 'Topic', 200),
-  body('tone')
-    .optional()
-    .isString()
-    .trim()
-    .toLowerCase()
-    .isIn(AI_TONES)
-    .withMessage(`tone must be one of: ${AI_TONES.join(', ')}`),
-];
-
-export const improvePostRules = [text('content', 'Content', 2000)];
-
 export const SUMMARY_LENGTH_VALUES = ['short', 'medium', 'detailed'];
 
 // Either { postId } (summarize a post's discussion, unchanged) or { content, length? } (summarize text)
@@ -187,5 +172,5 @@ export const summarizeRules = [
     .withMessage(`length must be one of: ${SUMMARY_LENGTH_VALUES.join(', ')}`),
 ];
 
-// Text checked or rewritten by the AI Content Assistant (same limit as a post)
+// Text checked by the content check (same limit as a post)
 export const contentCheckRules = [text('content', 'Content', POST_MAX_LENGTH)];

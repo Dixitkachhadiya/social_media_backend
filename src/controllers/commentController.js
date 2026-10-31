@@ -4,7 +4,7 @@ import AppError from '../utils/AppError.js';
 import { getPagination, paginationMeta } from '../utils/pagination.js';
 import { findAccessiblePost, formatAuthor } from '../services/postService.js';
 import { notifySafely, createNotification } from '../services/notificationService.js';
-import { enforceModeration } from '../services/moderationClient.js';
+import { enforceModeration } from '../services/moderationService.js';
 
 const PREVIEW_LENGTH = 80;
 

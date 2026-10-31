@@ -13,7 +13,7 @@ import feedRoutes from './routes/feedRoutes.js';
 import notificationRoutes from './routes/notificationRoutes.js';
 import aiRoutes from './routes/aiRoutes.js';
 import { notFound, errorHandler } from './middleware/errorHandler.js';
-import { moderationHealth } from './services/moderationClient.js';
+import { moderationHealth } from './services/moderationService.js';
 
 const app = express();
 
@@ -58,10 +58,14 @@ app.get('/api/db-status', async (req, res) => {
   }
 });
 
-// Local content moderation service status (posts and comments cannot be saved while it is down)
-app.get('/api/moderation/status', async (req, res) => {
-  const { available } = await moderationHealth();
-  res.status(available ? 200 : 503).json({ success: available, status: available ? 'available' : 'unavailable' });
+// Local moderation model status (posts and comments cannot be saved while it is unavailable)
+app.get('/api/moderation/status', (req, res) => {
+  const { available, model, version } = moderationHealth();
+  res.status(available ? 200 : 503).json({
+    success: available,
+    status: available ? 'available' : 'unavailable',
+    ...(available && model && { engine: 'in-process', model, version }),
+  });
 });
 
 // Feature routes

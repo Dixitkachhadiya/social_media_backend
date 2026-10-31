@@ -1,23 +1,18 @@
-// Integration test with the REAL local moderation service (ai-moderation, FastAPI on 127.0.0.1).
-// Opt-in, because it needs the Python service running:
-//   npm run moderation            (terminal 1)
-//   MODERATION_INTEGRATION=1 npm test -- tests/moderation.integration.test.js   (terminal 2)
+// End-to-end test with the REAL local moderation model, running inside the Node.js process
+// (src/ai/moderation): every post/comment save goes through it; nothing is mocked.
 import { api, auth, resetDatabase, closeDatabase, createUser, createPost } from './helpers.js';
-import { setModerationTransport, moderationHealth } from '../src/services/moderationClient.js';
+import { setModerationEngine, moderationHealth } from '../src/services/moderationService.js';
 import { useFakeModeration } from './mockModeration.js';
 
-const enabled = process.env.MODERATION_INTEGRATION === '1';
-const run = enabled ? describe : describe.skip;
-
-run('real local moderation model (end to end)', () => {
+describe('real local moderation model (end to end)', () => {
   let alice;
   let bob;
   let post;
 
   beforeAll(async () => {
-    setModerationTransport(null); // use the real HTTP service
-    const health = await moderationHealth();
-    if (!health.available) throw new Error('Moderation service is not running. Start it with: npm run moderation');
+    setModerationEngine(null); // use the real model
+    const health = moderationHealth();
+    if (!health.available) throw new Error('The moderation model could not be loaded');
     await resetDatabase();
     alice = await createUser();
     bob = await createUser();
@@ -49,6 +44,21 @@ run('real local moderation model (end to end)', () => {
     expect(res.body.code).toBe('CONTENT_MODERATION_FAILED');
     expect(res.body.moderation.flagged_terms.length).toBeGreaterThan(0);
     for (const f of res.body.moderation.flagged_terms) expect(content.slice(f.start, f.end)).toBe(f.text);
+  });
+
+  test('editing a post: clean edit saved, vulgar edit refused and the original kept', async () => {
+    const ok = await api().put(`/api/posts/${post.id}`).set(auth(bob.token)).send({ content: 'Sharing photos from our weekend trip to the hills and the lake.' });
+    expect(ok.status).toBe(200);
+    const bad = await api().put(`/api/posts/${post.id}`).set(auth(bob.token)).send({ content: 'Sharing photos from this shitty weekend trip.' });
+    expect(bad.status).toBe(422);
+    const current = await api().get(`/api/posts/${post.id}`).set(auth(bob.token));
+    expect(current.body.post.content).toBe('Sharing photos from our weekend trip to the hills and the lake.');
+  });
+
+  test('/api/moderation/status reports the in-process model', async () => {
+    const res = await api().get('/api/moderation/status');
+    expect(res.status).toBe(200);
+    expect(res.body).toMatchObject({ status: 'available', engine: 'in-process', model: 'tfidf-char-logreg' });
   });
 
   test('comments: clean saved, vulgar blocked, edit to vulgar blocked', async () => {

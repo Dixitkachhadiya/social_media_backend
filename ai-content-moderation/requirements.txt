@@ -1,6 +1,0 @@
-# Dataset generation, training and evaluation (inference runs in Node.js from models/*.json)
-pandas>=2.2
-numpy>=2.0
-openpyxl>=3.1
-scikit-learn>=1.6
-joblib>=1.4
