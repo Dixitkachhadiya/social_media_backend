@@ -20,7 +20,12 @@ process.env.EMAIL_FROM = 'AI Social <no-reply@test.local>';
 const { useMockTransport } = await import('./mockMailer.js');
 useMockTransport();
 
-// Moderation: every post/comment save runs the local model. Unit tests use a deterministic fake with the
-// same result shape; tests/moderation.integration.test.js and tests/aiModel.test.js use the real model.
+// AI (Ollama): no request reaches a real model unless OLLAMA_INTEGRATION=1 (tests/moderation.integration.test.js).
+// Every post/comment save is moderated; unit tests use a deterministic fake that returns the model's JSON.
+if (process.env.OLLAMA_INTEGRATION !== '1') {
+  process.env.OLLAMA_BASE_URL = 'http://127.0.0.1:9'; // nothing listens here
+  process.env.OLLAMA_MODEL = 'test-model';
+  process.env.OLLAMA_API_KEY = '';
+}
 const { useFakeModeration } = await import('./mockModeration.js');
 useFakeModeration();

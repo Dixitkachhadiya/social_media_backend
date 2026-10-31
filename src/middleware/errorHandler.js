@@ -25,6 +25,12 @@ const normalizeError = (err) => {
   if (err.name === 'SequelizeForeignKeyConstraintError') {
     return new AppError('Referenced resource does not exist', 409);
   }
+  // Database refused or did not hand out a connection in time (e.g. connection limit reached): retryable
+  if (['SequelizeConnectionError', 'SequelizeConnectionRefusedError', 'SequelizeConnectionTimedOutError', 'SequelizeConnectionAcquireTimeoutError'].includes(err.name)
+    || /too many (connections|clients)/i.test(err.parent?.message || err.message || '')) {
+    console.error(`[database] ${err.name}: ${err.parent?.message || err.message}`);
+    return new AppError('The server is busy. Please try again in a moment.', 503, { retryAfter: 5, code: 'DATABASE_BUSY' });
+  }
   if (err.type === 'entity.too.large') {
     return new AppError('Request body is too large', 413);
   }

@@ -153,6 +153,36 @@ export const recentUsersRules = [
 
 // ---------- AI ----------
 
+export const AI_TONES = ['professional', 'casual', 'friendly', 'humorous', 'inspirational', 'informative', 'motivational'];
+
+const toneRule = () =>
+  body('tone')
+    .optional()
+    .isString()
+    .trim()
+    .toLowerCase()
+    .isIn(AI_TONES)
+    .withMessage(`tone must be one of: ${AI_TONES.join(', ')}`);
+
+export const generatePostRules = [
+  text('topic', 'Topic', 200),
+  text('description', 'Description', 500, { optional: true }),
+  // Up to 10 keywords: an array of strings or one comma-separated string
+  body('keywords')
+    .optional()
+    .customSanitizer((value) => (typeof value === 'string' ? value.split(',') : value))
+    .custom((value) => {
+      if (!Array.isArray(value) || value.length > 10 || value.some((k) => typeof k !== 'string' || k.trim().length > 40)) {
+        throw new Error('keywords must be at most 10 words or short phrases (40 characters each)');
+      }
+      return true;
+    })
+    .customSanitizer((value) => value.map((k) => k.trim()).filter(Boolean)),
+  toneRule(),
+];
+
+export const improvePostRules = [text('content', 'Content', 2000), toneRule()];
+
 export const SUMMARY_LENGTH_VALUES = ['short', 'medium', 'detailed'];
 
 // Either { postId } (summarize a post's discussion, unchanged) or { content, length? } (summarize text)

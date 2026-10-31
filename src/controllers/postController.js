@@ -4,12 +4,13 @@ import AppError from '../utils/AppError.js';
 import { getPagination, paginationMeta } from '../utils/pagination.js';
 import { listPosts, getPostDetails } from '../services/postService.js';
 import { enforceModeration } from '../services/moderationService.js';
+import { broadcastPostActivity } from '../services/liveUpdateService.js';
 
 // POST /api/posts
 export const createPost = async (req, res) => {
   const { content, image_url = null } = matchedData(req);
 
-  // Mandatory server-side moderation (local model) before saving: 422 if not clean, 503 if unavailable
+  // Mandatory server-side moderation before saving: 422 if not appropriate, 503 if the AI model is unavailable
   await enforceModeration(content, 'post');
 
   // Ownership always comes from the JWT
@@ -58,6 +59,7 @@ export const updatePost = async (req, res) => {
   // An explicit null removes the image
   if ('image_url' in req.body) updates.image_url = image_url ?? null;
   await post.update(updates);
+  await broadcastPostActivity({ postId: post.id, type: 'post-updated', actorId: req.user.id });
 
   res.status(200).json({
     success: true,
@@ -82,6 +84,7 @@ export const deletePost = async (req, res) => {
 
   // Likes, comments and related notifications are removed by ON DELETE CASCADE
   await post.destroy();
+  await broadcastPostActivity({ postId: post.id, type: 'post-deleted', actorId: req.user.id });
 
   res.status(200).json({
     success: true,

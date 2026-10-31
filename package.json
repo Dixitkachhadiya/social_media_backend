@@ -11,7 +11,7 @@
     "migrate:undo": "node src/database/migrate.js down",
     "migrate:status": "node src/database/migrate.js status",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --runInBand",
-    "moderation:parity": "node scripts/check-moderation-parity.js"
+    "ai:check": "node scripts/check-ollama.js"
   },
   "engines": {
     "node": ">=18"

@@ -10,12 +10,3 @@ node_modules/
 *.log
 npm-debug.log*
 
-# Local moderation model (Backend/ai-moderation): Python env, the downloaded pretrained model and the
-# fine-tuned transformer weights are large and reproducible (see ai-moderation/README.md); small
-# artifacts (baseline model, lexicon, deployment.json, reports) are committed.
-ai-moderation/.venv/
-ai-moderation/models/pretrained/
-ai-moderation/models/transformer/*.safetensors
-ai-moderation/models/*.log
-__pycache__/
-*.pyc

@@ -1,6 +1,6 @@
 # API Documentation: AI-Powered Social Media Platform
 
-REST API built with Node.js, Express 5, PostgreSQL (Sequelize), JWT, Socket.IO and Google Gemini.
+REST API built with Node.js, Express 5, PostgreSQL (Sequelize), JWT, Socket.IO and Ollama (AI moderation, suggestions, summaries and writing help).
 
 - **Base URL (local):** `http://localhost:5000`
 - **Format:** JSON request and response bodies (`Content-Type: application/json`)
@@ -24,8 +24,8 @@ REST API built with Node.js, Express 5, PostgreSQL (Sequelize), JWT, Socket.IO a
 13. [Real-time notifications (Socket.IO)](#13-real-time-notifications-socketio)
 14. [Admin: user management](#14-admin-user-management)
 15. [Admin: dashboard and announcements](#15-admin-dashboard-and-announcements)
-16. [AI features](#16-ai-features)
-    - [16a. Content moderation (local model, posts and comments)](#16a-content-moderation-local-model-posts-and-comments)
+16. [AI features (Ollama)](#16-ai-features-ollama)
+    - [16a. Content moderation and AI suggestions (posts and comments)](#16a-content-moderation-and-ai-suggestions-posts-and-comments)
 17. [Rate limits](#17-rate-limits)
 18. [Endpoint index](#18-endpoint-index)
 
@@ -55,7 +55,9 @@ npm run dev                   # http://localhost:5000 (auto-restart)
 | `npm run migrate` | Apply pending migrations |
 | `npm run migrate:status` | List applied and pending migrations |
 | `npm run migrate:undo` | Revert the last migration |
-| `npm test` | Run the Jest + Supertest suite against the separate test database |
+| `npm test` | Run the Jest + Supertest suite against the separate test database (the AI model is faked) |
+| `npm run ai:check` | Check the real Ollama setup: model available, moderation samples, a summary, timings |
+| `OLLAMA_INTEGRATION=1 npm test -- tests/moderation.integration.test.js` | End-to-end moderation tests against the real Ollama model |
 
 The server refuses to start while migrations are pending.
 
@@ -74,11 +76,15 @@ The server refuses to start while migrations are pending.
 | `EMAIL_FROM` | for email | Sender, e.g. `"AI Social <no-reply@example.com>"` |
 | `APP_NAME` | no | Brand name in emails (default `AI Social`) |
 | `OTP_SECRET` | no | Secret for hashing one-time codes (defaults to `JWT_SECRET`) |
-| `GEMINI_API_KEY` | for AI | Google AI Studio API key |
-| `GEMINI_MODEL` | no | Gemini model (default `gemini-flash-latest`) |
-| `MODERATION_SERVICE_URL` | no | Local moderation service (default `http://127.0.0.1:8001`). Posts and comments are refused (503) while it is unreachable |
-| `MODERATION_TIMEOUT_MS` | no | Timeout per moderation request (default `5000`) |
-| `MODERATION_SERVICE_KEY` | no | Shared secret sent as `X-Moderation-Key`; set the same value for the Python service |
+| `DB_POOL_MAX` | no | Database connections per backend process (default `4`). Hosted plans cap connections per database user (Clever Cloud free: 5) and every process using the same credentials shares that cap |
+| `OLLAMA_BASE_URL` | yes | `https://ollama.com` (Ollama Cloud) or `http://localhost:11434` (local Ollama, development only) |
+| `OLLAMA_MODEL` | yes | Model name as listed by `GET /api/tags`, e.g. `gemma4:31b` on Ollama Cloud |
+| `OLLAMA_API_KEY` | for Ollama Cloud | Sent as `Authorization: Bearer <key>`; never sent to the frontend or logged. Create it at <https://ollama.com/settings/keys> |
+| `OLLAMA_TIMEOUT_MS` | no | Timeout per model request (default `60000`) |
+| `OLLAMA_MAX_RETRIES` | no | Retries for network errors, 5xx and rate limits of 5 s or less (default `2`, backoff 0.5 s, 1 s). Timeouts are never retried |
+| `OLLAMA_MAX_CONCURRENCY` | no | Requests sent to Ollama at once (default `4`); up to 20 more wait, then `503` |
+| `OLLAMA_NUM_CTX` | no | Context window in tokens (default `8192`) |
+| `OLLAMA_KEEP_ALIVE` | no | Local Ollama only: how long the model stays in memory (default `30m`) |
 
 **Gmail:** `SMTP_HOST=smtp.gmail.com`, `SMTP_PORT=587` (STARTTLS is required), `SMTP_USER` = the full Gmail address, `SMTP_PASS` = a 16-character [App Password](https://myaccount.google.com/apppasswords) (needs 2-Step Verification; the normal account password is rejected with `535`). Spaces in the App Password are ignored.
 
@@ -91,7 +97,35 @@ An email counts as delivered only when the SMTP server accepts the recipient.
 - The server log shows `SMTP connection successful`, `Verification email delivered successfully to pr***@example.com`, or the SMTP error code. It never shows codes or credentials.
 
 `.env` is loaded from the `Backend/` folder by absolute path (`src/config/env.js`), whichever directory the server is started from. Restart the server after editing it.
-**Without Gemini:** AI endpoints respond with `503 AI service is not configured`.
+**Without a reachable Ollama model:** posts and comments cannot be saved (`503 MODERATION_UNAVAILABLE`) and the AI endpoints answer `503`. Everything else works.
+
+### Ollama setup
+
+**Ollama Cloud (production, and the simplest development setup):** set `OLLAMA_BASE_URL=https://ollama.com`,
+`OLLAMA_API_KEY=<your key>` and `OLLAMA_MODEL=gemma4:31b` in `.env` (and in the Render environment), then run
+`npm run ai:check`. At startup the server logs `[ai] ollama-cloud model "gemma4:31b" is connected (… ms)`, or the
+reason it is not (`authentication_failed`, `model_unavailable`, …). Ollama Cloud lists its models without a key,
+so the status check makes a one-token chat request to prove that the key works.
+
+**Local Ollama (optional, development only):**
+
+1. Install Ollama: Windows/macOS from <https://ollama.com/download> (on Windows also `winget install Ollama.Ollama`); Linux `curl -fsSL https://ollama.com/install.sh | sh`. It runs as a background service on `http://localhost:11434`.
+2. Download the model and try it:
+
+   ```bash
+   ollama pull gemma3:4b
+   ollama list
+   ollama run gemma3:4b "Reply with OK"
+   ```
+
+3. Set `OLLAMA_BASE_URL=http://localhost:11434` and `OLLAMA_MODEL=gemma3:4b` in `.env`, then run `npm run ai:check` (moderation samples in every supported language, a summary and a generated post, with timings). The server logs `[ai] Ollama model "gemma3:4b" is available.` at startup.
+
+**Production (Render):** Render cannot reach `localhost` on your computer, and a Render web service does not have the memory to run the model itself. Use one of:
+
+- **Ollama Cloud (configured):** `OLLAMA_BASE_URL=https://ollama.com`, `OLLAMA_API_KEY=<key>`, `OLLAMA_MODEL=gemma4:31b`. The key stays on Render; Vercel never receives it.
+- **Self-hosted:** Ollama on a VM with at least 8 GB RAM, **never exposed directly** (Ollama has no authentication). Put an HTTPS reverse proxy in front that requires `Authorization: Bearer <secret>`, then set `OLLAMA_API_KEY=<secret>` and `OLLAMA_BASE_URL=https://<proxy host>`.
+
+Until one of these is configured, the live site refuses new posts and comments with `503` (moderation fails closed).
 
 ### Development accounts
 
@@ -679,7 +713,7 @@ A post object:
 | Purpose | Create a post owned by the authenticated user |
 | Auth / Role | JWT / any |
 | Body | `content` (required, 1–5000 chars, trimmed), `image_url` (optional http/https URL ≤500). Any other field (e.g. `user_id`) is rejected |
-| Moderation | Checked by the local model before saving ([section 16a](#16a-content-moderation-local-model-posts-and-comments)): `422 CONTENT_MODERATION_FAILED` if not clean, `503 MODERATION_UNAVAILABLE` if the model service is down |
+| Moderation | Checked by the AI model before saving ([section 16a](#16a-content-moderation-and-ai-suggestions-posts-and-comments)): `422 CONTENT_MODERATION_FAILED` with flagged words and a suggested version if not appropriate, `503 MODERATION_UNAVAILABLE` if the model is unavailable |
 | Status | `201`; `400`; `401`; `422`; `503` |
 
 Request:
@@ -875,7 +909,7 @@ curl http://localhost:5000/api/posts/5d9e8f7a-6b5c-4d3e-a2f1-0e9d8c7b6a51/likes
 | Purpose | Comment on a post. Notifies the post owner (not for your own post) |
 | Auth / Role | JWT / any |
 | Body | `content` (1–1000 chars) |
-| Moderation | Checked by the local model before saving ([section 16a](#16a-content-moderation-local-model-posts-and-comments)) |
+| Moderation | Checked by the AI model before saving ([section 16a](#16a-content-moderation-and-ai-suggestions-posts-and-comments)) |
 | Status | `201`; `400`; `401`; `404`; `422`; `503` |
 
 Request:
@@ -1074,6 +1108,7 @@ socket.on('connected', ({ user_id, rooms }) => console.log('joined', rooms));
 socket.on('notification', (n) => showToast(n.message));          // like, comment, login (admins)
 socket.on('announcement', (a) => showBanner(a.message));          // admin announcements
 socket.on('admin:user-login', (e) => refreshDashboard(e));       // admins only
+socket.on('post:activity', (a) => updateCounts(a));              // live likes/comments (ids and counts only)
 socket.on('connect_error', (err) => console.error(err.message)); // e.g. "Token has expired"
 
 // After (re)connecting, fetch anything missed while offline:
@@ -1086,6 +1121,9 @@ socket.on('connect_error', (err) => console.error(err.message)); // e.g. "Token 
 | `notification` | `user:<id>` | notification object (same shape as REST) |
 | `announcement` | everyone connected | `{ type, message, related_user, created_at }` |
 | `admin:user-login` | `admins` | `{ user: { id, username, role }, logged_in_at }` |
+| `post:activity` | everyone connected | `{ post_id, type, actor_id, likes_count, comments_count, comment_id? }`; `type`: `like`, `unlike`, `comment-added`, `comment-updated`, `comment-deleted`, `post-updated`, `post-deleted` |
+
+`post:activity` carries ids and counts only, never content: a client showing the post refetches it (or its comments) over HTTP, so the API's visibility rules still apply. Refused (moderated) comments send no event.
 
 **Security:**
 
@@ -1260,26 +1298,60 @@ curl -X POST http://localhost:5000/api/admin/announcements \
 
 ---
 
-## 16. AI features
+## 16. AI features (Ollama)
 
-Powered by Google Gemini through the official `@google/genai` SDK. All endpoints:
+Every AI feature runs on an [Ollama](https://ollama.com) model configured on the server (`OLLAMA_BASE_URL`,
+`OLLAMA_MODEL`, see [Ollama setup](#ollama-setup)). The frontend never sees the Ollama URL, model host or any key. All endpoints:
 
-- require a JWT and are rate limited to 20 requests per 15 minutes per user
-- never publish anything (`meta.published: false`); the user reviews the text and calls `POST /api/posts`
-- wrap user text in `<user_input>` tags with instructions to treat it as data (prompt-injection guard)
-- return safe errors: `429` provider quota (with `Retry-After`), `503` not configured or unavailable, `504` timeout, `502` empty response. Provider details are logged server-side only
+- require a JWT; generate, improve and summarize are rate limited to 20 requests per 15 minutes per user
+- never publish anything (`meta.published: false`); the user reviews the text and calls `POST /api/posts`, which is moderated
+- wrap user text in tags with instructions to treat it as data (prompt-injection guard)
+- check that the configured model is available (cached for a minute) before calling it
+- retry transient failures a bounded number of times (`OLLAMA_MAX_RETRIES`), never after a timeout
+- stop the model call when the client disconnects
+- return safe errors, with details logged server-side only:
+
+| Status | When |
+|---|---|
+| `503` (`Retry-After: 30`) | Ollama unreachable, key rejected, model not available, not configured, other Ollama errors |
+| `503` (`Retry-After: 15`) | more than 20 AI requests already waiting (`OLLAMA_MAX_CONCURRENCY` are processed at a time) |
+| `429` (`Retry-After` from Ollama) | Ollama Cloud rate limit (moderation answers `503` instead) |
+| `504` | the model did not answer within `OLLAMA_TIMEOUT_MS` (default 60000) |
+| `502` | the model returned no text |
+| `422` `TEXT_TOO_SHORT` | summarize: fewer than 20 words |
+
+`meta` on success: `{ "ai_generated": true, "provider": "ollama", "model": "gemma4:31b", ... }`.
+
+### GET /api/ai/status
+
+A real end-to-end check (configuration, reachability, model list, and a one-token authenticated chat), cached for
+one minute. Never returns URLs, keys or upstream error text.
+
+| | |
+|---|---|
+| Auth | JWT / any |
+| `status` | `connected`, `not_configured`, `authentication_failed`, `model_unavailable`, `rate_limited`, `service_unavailable` |
+| Status | `200` when connected, otherwise `503` |
+
+```json
+{
+  "success": true, "available": true, "operational": true, "status": "connected",
+  "provider": "ollama-cloud", "model": "gemma4:31b",
+  "configured": true, "reachable": true, "authenticated": true, "model_available": true, "latency_ms": 2327
+}
+```
 
 ### POST /api/ai/generate-post
 
 | | |
 |---|---|
-| Body | `topic` (1–200 chars, required), `tone` (optional: `professional` (default), `casual`, `friendly`, `humorous`, `inspirational`, `informative`) |
-| Status | `200`; `400`; `401`; `429`; `503` |
+| Body | `topic` (1–200 chars, required), `description` (optional, ≤ 500 chars), `keywords` (optional: up to 10 strings of ≤ 40 chars, or one comma-separated string), `tone` (optional: `professional` (default), `casual`, `friendly`, `humorous`, `inspirational`, `informative`, `motivational`) |
+| Status | `200`; `400`; `401`; `429`; `502`; `503`; `504` |
 
 Request:
 
 ```json
-{ "topic": "Importance of learning programming", "tone": "professional" }
+{ "topic": "Importance of learning programming", "description": "For beginners", "keywords": ["practice", "patience"], "tone": "professional" }
 ```
 
 Response `200`:
@@ -1288,18 +1360,12 @@ Response `200`:
 {
   "success": true,
   "data": {
-    "content": "Learning to program is no longer just for software engineers. It sharpens problem-solving, helps you automate repetitive work, and lets you turn ideas into working products.\n\nStart small, stay consistent, and build things you care about. #Programming #LifelongLearning #Tech",
+    "content": "Learning to program sharpens problem-solving and lets you turn ideas into working products...\n\n#Programming #LifelongLearning",
     "topic": "Importance of learning programming",
     "tone": "professional"
   },
-  "meta": { "provider": "gemini", "model": "gemini-flash-latest", "published": false, "note": "Generated content is not published. Review it, then create a post with POST /api/posts." }
+  "meta": { "ai_generated": true, "provider": "ollama", "model": "gemma4:31b", "published": false, "note": "Generated content is not published. Review it, then create a post with POST /api/posts." }
 }
-```
-
-Error `503` (no API key):
-
-```json
-{ "success": false, "message": "AI service is not configured. Set GEMINI_API_KEY on the server." }
 ```
 
 ```bash
@@ -1312,14 +1378,8 @@ curl -X POST http://localhost:5000/api/ai/generate-post \
 
 | | |
 |---|---|
-| Body | `content` (1–2000 chars) |
-| Behavior | Fixes grammar and readability while preserving meaning and length |
-
-Request:
-
-```json
-{ "content": "i am learning node js and it is very good" }
-```
+| Body | `content` (1–2000 chars), `tone` (optional, same values as generate-post; without it the author's tone is kept) |
+| Behavior | Fixes grammar, readability and sentence structure while preserving meaning, facts, language, script and length. The original is returned unchanged next to the improved version |
 
 Response `200`:
 
@@ -1327,115 +1387,72 @@ Response `200`:
 {
   "success": true,
   "data": { "original": "i am learning node js and it is very good", "improved": "I'm learning Node.js, and I'm really enjoying it." },
-  "meta": { "provider": "gemini", "model": "gemini-flash-latest", "published": false, "note": "Generated content is not published. Review it, then create a post with POST /api/posts." }
+  "meta": { "ai_generated": true, "provider": "ollama", "model": "gemma4:31b", "published": false, "note": "..." }
 }
-```
-
-```bash
-curl -X POST http://localhost:5000/api/ai/improve-post \
-  -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" \
-  -d '{"content":"i am learning node js and it is very good"}'
 ```
 
 ### POST /api/ai/summarize
 
-| | |
-|---|---|
-| Body | `postId` (UUID) |
-| Access | Same visibility as the rest of the API: posts by deactivated users return `404` |
-| Limits | At most the 50 most recent comments, 500 chars per comment, 2000 chars of post, about 12,000 chars in total |
-| No comments | Answers directly without calling the AI (`meta.ai_generated: false`) |
-| Status | `200`; `400`; `404`; `429`; `503` |
-
-Request:
-
-```json
-{ "postId": "5d9e8f7a-6b5c-4d3e-a2f1-0e9d8c7b6a51" }
-```
-
-Response `200`:
-
-```json
-{
-  "success": true,
-  "data": {
-    "post_id": "5d9e8f7a-6b5c-4d3e-a2f1-0e9d8c7b6a51",
-    "summary": "Priya announced the launch of her AI-powered social platform backend. Commenters congratulated her and asked how real-time notifications work; she explained the Socket.IO setup with per-user rooms secured by JWT.",
-    "comments_total": 2,
-    "comments_included": 2
-  },
-  "meta": { "ai_generated": true, "provider": "gemini", "model": "gemini-flash-latest" }
-}
-```
-
-Response `200` (no comments):
-
-```json
-{ "success": true, "data": { "post_id": "5d9e8f7a-6b5c-4d3e-a2f1-0e9d8c7b6a51", "summary": "This post has no comments yet, so there is no discussion to summarize.", "comments_total": 0, "comments_included": 0 }, "meta": { "ai_generated": false } }
-```
-
-```bash
-curl -X POST http://localhost:5000/api/ai/summarize \
-  -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" \
-  -d '{"postId":"5d9e8f7a-6b5c-4d3e-a2f1-0e9d8c7b6a51"}'
-```
-
----
-
-### POST /api/ai/summarize: text mode
-
-The same endpoint also summarizes **text** (e.g. a long draft): send `content` instead of `postId`.
+Send either `content` (summarize text) **or** `postId` (summarize a post's discussion), not both.
 
 | | |
 |---|---|
-| Body | `{ "content": "...", "length": "short" \| "medium" \| "detailed" }` (`length` defaults to `medium`; content 1–5000 chars). Send either `postId` **or** `content`, not both |
-| Status | `200`; `400`; `401`; `429`; `503` (AI not configured); `504` |
+| Text mode | `{ "content": "...", "length": "short" \| "medium" \| "detailed" }` (`length` defaults to `medium`; content 1–5000 chars, at least 20 words) |
+| Discussion mode | `{ "postId": "<uuid>" }`. Same visibility as the rest of the API (`404` for posts by deactivated users). At most the 50 most recent comments, 500 chars per comment, 2000 chars of post, about 12,000 chars in total. Without comments it answers directly without calling the model (`meta.ai_generated: false`) |
+| Status | `200`; `400`; `401`; `404`; `422` `TEXT_TOO_SHORT`; `429`; `502`; `503`; `504` |
 
-Response `200`:
+Response `200` (text):
 
 ```json
 {
   "success": true,
   "data": { "summary": "Our robotics club placed second at the state competition.", "length": "short", "original_length": 402, "summary_length": 58 },
-  "meta": { "ai_generated": true, "provider": "gemini", "model": "gemini-flash-latest", "published": false, "note": "Generated content is not published. Review it, then create a post with POST /api/posts." }
+  "meta": { "ai_generated": true, "provider": "ollama", "model": "gemma4:31b", "published": false, "note": "..." }
+}
+```
+
+Response `200` (discussion):
+
+```json
+{
+  "success": true,
+  "data": { "post_id": "5d9e8f7a-...", "summary": "Priya announced the launch of her platform. Commenters congratulated her and asked how notifications work.", "comments_total": 2, "comments_included": 2 },
+  "meta": { "ai_generated": true, "provider": "ollama", "model": "gemma4:31b" }
 }
 ```
 
 ---
 
-## 16a. Content moderation (local model, posts and comments)
+## 16a. Content moderation and AI suggestions (posts and comments)
 
-Every post and comment is checked by **our own locally running model** before it is saved. No Gemini, OpenAI,
-Claude or other external AI API is used for moderation.
+Every post and comment is checked by the Ollama model **on the server, before it is saved**. For inappropriate
+content the model also identifies the words to review, explains the problem in one sentence, and writes a
+respectful alternative that keeps the author's meaning, language and script.
 
-- **Service:** `Backend/ai-moderation` (Python, FastAPI) on `127.0.0.1:8001`, started with `npm run moderation`.
-  Node calls it over an internal HTTP request (`MODERATION_SERVICE_URL`, timeout `MODERATION_TIMEOUT_MS`,
-  optional shared key `MODERATION_SERVICE_KEY` sent as `X-Moderation-Key`).
-- **Model:** a word/phrase list plus a 7-label classifier: a locally **fine-tuned** DistilBERT-multilingual, or the
-  TF-IDF + logistic regression baseline, whichever validated better (`ai-moderation/models/deployment.json`).
-  Measured performance and limits: `ai-moderation/evaluation/report.md`. The training data is synthetic, so the
-  model **can be wrong**.
-- **Languages:** English, Hindi (Devanagari), Gujarati (script), Hinglish, romanized Hindi/Gujarati and mixed text,
-  including obfuscation (`f*ck`, `b1tch`, `f u c k`, `fuuuck`).
-- **Privacy:** user text is never logged or stored by the service or by the moderation client.
+- **Detected:** vulgar/obscene language, sexual or explicit text, personal insults, harassment and bullying, hate speech,
+  threats. In English, Hindi (Devanagari), Gujarati (script), Hinglish, romanized Hindi/Gujarati and mixed text.
+- **Not flagged (by instruction):** criticism, complaints, disagreement, negative reviews, harmless jokes, normal conversation.
+- **Policy:** every non-clean category is blocked, including mild profanity.
+- **Structured answer:** the model is asked for a JSON object (temperature 0; a JSON schema is sent as `format`, which
+  local Ollama enforces and Ollama Cloud may ignore, so the reply is also accepted inside Markdown fences and then
+  validated). An unparseable answer fails closed (`503`).
+- **Suggestions are checked before they are shown:** a rewrite is moderated by the same model; if it does not pass,
+  no suggestion is offered.
+- **Cache:** verdicts are kept in memory for 10 minutes, keyed by SHA-256 of the exact text (Unicode NFC, trimmed)
+  together with the server, model and a hash of the prompt, so a changed prompt or model never reuses a verdict.
+  "Check" followed by "Publish", or publishing an offered suggestion, does not wait for the model again. Nothing is
+  written to the database or the log.
+- **The model's answer is validated, not trusted:** unknown categories become `OTHER`; an answer that is "allowed"
+  but names a category (or the reverse) is treated as **blocked**; flagged words that do not occur in the text are
+  dropped; a suggestion that still contains a flagged word, or equals the original, is not offered.
+- The model can be wrong: it is a general-purpose language model instructed by a prompt, not a trained classifier.
 
-**Labels and publishing policy** (this project blocks every non-clean label):
-
-| Label | Severity | Publishing |
-|---|---|---|
-| `CLEAN` | none | allowed |
-| `MILD_PROFANITY` | low | blocked: edit and resubmit |
-| `VULGAR` | medium | blocked |
-| `PERSONAL_ABUSE` | medium (high for severe slurs) | blocked |
-| `HARASSMENT` | high | blocked |
-| `HATE_SPEECH` | high | blocked |
-| `THREAT` | high | blocked |
-
-When the model leans toward toxic but is below the block threshold and no listed word was found, the decision is
-`uncertain`. It is **also refused**, with a "please rephrase" message, so questionable content is never silently
-approved. Texts under 3 words are judged by the word list only. Ordinary criticism, disagreement and negative
-feedback are not blocked unless they contain abusive language. Context-dependent words such as *kutta* ("dog")
-only count when aimed at someone.
+| Category | Severity |
+|---|---|
+| `CLEAN` | none (allowed) |
+| `MILD_PROFANITY` | low |
+| `VULGAR`, `SEXUAL`, `PERSONAL_ABUSE`, `OTHER` | medium |
+| `HARASSMENT`, `HATE_SPEECH`, `THREAT` | high |
 
 ### Routes that are moderated
 
@@ -1443,66 +1460,74 @@ only count when aimed at someone.
 |---|---|
 | `POST /api/posts` | always |
 | `PUT /api/posts/:id` | when `content` is sent (after the 403 ownership check) |
-| `POST /api/posts/:id/comments` | always (after the 404 post check); no notification is created for refused comments |
+| `POST /api/posts/:id/comments` | always (after the 404 post check); no notification or live event for refused comments |
 | `PUT /api/comments/:id` | always (after the 403 author check) |
 
-The check runs on the server before saving, so calling the API directly cannot bypass it. Fields such as
-`moderation` in the request body are rejected (`400 Unknown fields`), and results sent by a client are never trusted.
+Calling the API directly cannot bypass the check. Fields such as `moderation` in the request body are rejected
+(`400 Unknown fields`), and moderation results sent by a client are never used: the submitted text is always checked.
 
 **Refused (`422`):** nothing is saved.
 
 ```json
 {
   "success": false,
-  "message": "Please remove inappropriate words from your content before publishing.",
+  "message": "Your content contains inappropriate language. Review the highlighted words and use the AI suggestion to make your content respectful.",
   "code": "CONTENT_MODERATION_FAILED",
   "blocked": true,
+  "allowed": false,
+  "category": "PERSONAL_ABUSE",
+  "flaggedWords": ["stupid person", "idiot"],
+  "reason": "The text insults a person.",
+  "suggestedText": "I strongly disagree with this person's actions.",
   "moderation": {
     "decision": "block",
+    "allowed": false,
     "blocked": true,
-    "is_toxic": true,
-    "category": "VULGAR",
-    "category_label": "Vulgar language",
+    "category": "PERSONAL_ABUSE",
+    "category_label": "Personal insults",
     "severity": "medium",
-    "confidence": 0.96,
-    "detected_language": "English",
-    "flagged_terms": [{ "text": "fucking", "start": 5, "end": 12, "category": "VULGAR" }],
-    "explanation": "The text contains vulgar or sexual language. Flagged: \"fucking\"."
+    "flagged_terms": [
+      { "text": "stupid person", "start": 12, "end": 25, "category": "PERSONAL_ABUSE" },
+      { "text": "idiot", "start": 36, "end": 41, "category": "PERSONAL_ABUSE" }
+    ],
+    "flagged_words": ["stupid person", "idiot"],
+    "explanation": "The text insults a person.",
+    "suggested_text": "I strongly disagree with this person's actions.",
+    "detected_language": "English"
   }
 }
 ```
 
-- `decision`: `block`, or `uncertain` (then `is_toxic` is `null` and the message is
-  "We couldn't verify that this content is appropriate. Please rephrase it and try again.").
 - `flagged_terms[].start/end`: UTF-16 positions in the submitted text (JavaScript string indices), for highlighting.
-  Empty when only the classifier fired.
-- `confidence`: the model's probability that the text is not clean.
-- Model names, versions, probabilities and timings are not exposed.
+- `suggestedText` / `suggested_text`: `null` when no usable suggestion was produced. Applying it is the user's choice;
+  the suggestion is moderated again when submitted.
 
-**Moderation service unavailable (`503`):** fail closed, so nothing is saved.
+**Model unavailable (`503`, or `504` on timeout):** fail closed, so nothing is saved and the user can retry.
 
 ```json
-{ "success": false, "message": "Content checking is temporarily unavailable. Please try again.", "code": "MODERATION_UNAVAILABLE" }
+{ "success": false, "message": "Content checking is temporarily unavailable. Please try again in a moment.", "code": "MODERATION_UNAVAILABLE" }
 ```
 
-This covers the service being down, timing out (`MODERATION_TIMEOUT_MS`, default 5000 ms), or returning a malformed
-response. The backend logs a safe technical line (`[moderation] Service unavailable at …`), never the content.
+This covers Ollama being unreachable, the model not being pulled, a timeout, too many waiting requests, or an
+answer that does not match the JSON schema. The log shows `[ai] moderation failed (<code>): …`, never the content.
 
 ### POST /api/ai/moderate-content
 
-Optional pre-check (the composer's "Check" button). Same model and policy as saving, but nothing is saved.
+The "Check" / "Recheck content" button. Same model, prompt and validation as saving, but nothing is saved.
 
 | | |
 |---|---|
 | Auth | JWT / any |
 | Body | `{ "content": "..." }` (1–5000 chars; no other fields) |
-| Status | `200`; `400`; `401`; `429` (120 / 15 min / user); `503` service unavailable |
+| Status | `200`; `400`; `401`; `429` (120 / 15 min / user); `503`; `504` |
 
-Response `200`: `{ "success": true, "data": { ...moderation object above, "message": "Your content looks good." | "Please remove …" | "We couldn't verify …" } }`
+Response `200`: `{ "success": true, "data": { ...moderation object above, "reason", "flaggedWords", "suggestedText", "message" } }`
+(`message` is `"Your content looks good."` when allowed).
 
 ### GET /api/moderation/status
 
-Public. `200 { "success": true, "status": "available" }` or `503 { "success": false, "status": "unavailable" }`.
+Public; reveals only availability. `200 { "success": true, "status": "available", "provider": "ollama", "model": "gemma4:31b" }`
+or `503 { "success": false, "status": "unavailable", "provider": "ollama", "reason": "UNREACHABLE" }`.
 
 ---
 
@@ -1518,7 +1543,7 @@ Public. `200 { "success": true, "status": "available" }` or `503 { "success": fa
 | Wrong guesses per code | 5, then the code is invalidated | code |
 | verify-reset-token, reset-password | 20 / 15 min | IP |
 | AI endpoints (generate, improve, summarize) | 20 / 15 min | user |
-| moderate-content (local moderation model) | 120 / 15 min | user |
+| moderate-content (AI moderation check) | 120 / 15 min | user |
 
 Limited responses: `429` with `RateLimit` and `Retry-After` headers. Limits are disabled in `NODE_ENV=test`.
 
@@ -1571,10 +1596,11 @@ Limited responses: `429` with `RateLimit` and `Retry-After` headers. Limits are 
 | GET | `/api/admin/dashboard/recent-users` | JWT | admin |
 | GET | `/api/admin/dashboard/recent-posts` | JWT | admin |
 | POST | `/api/admin/announcements` | JWT | admin |
+| GET | `/api/ai/status` | JWT | any |
 | POST | `/api/ai/generate-post` | JWT | any |
 | POST | `/api/ai/improve-post` | JWT | any |
 | POST | `/api/ai/summarize` | JWT | any |
 | POST | `/api/ai/moderate-content` | JWT | any |
 | GET | `/api/moderation/status` | – | – |
 
-**Postman:** import both files from `postman/`, select the **Social Media API - Local** environment and run the collection. It registers two fresh users, exercises every endpoint above (90 requests, 142 assertions; the moderation requests need `npm run moderation`) and deletes its test data at the end. Note that the announcement step notifies every active user in the database.
+**Postman:** import both files from `postman/`, select the **Social Media API - Local** environment and run the collection. It registers two fresh users, exercises every endpoint above (the AI and moderation requests need a reachable Ollama model) and deletes its test data at the end. Note that the announcement step notifies every active user in the database.

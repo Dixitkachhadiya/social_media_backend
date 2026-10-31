@@ -5,6 +5,7 @@ import { getPagination, paginationMeta } from '../utils/pagination.js';
 import { findAccessiblePost, formatAuthor } from '../services/postService.js';
 import { notifySafely, createNotification } from '../services/notificationService.js';
 import { enforceModeration } from '../services/moderationService.js';
+import { broadcastPostActivity } from '../services/liveUpdateService.js';
 
 const PREVIEW_LENGTH = 80;
 
@@ -33,7 +34,7 @@ export const addComment = async (req, res) => {
   const { id, content } = matchedData(req);
   const post = await findAccessiblePost(id, req.user);
 
-  // Mandatory moderation (local model) before saving: 422 if not clean, 503 if unavailable
+  // Mandatory moderation before saving: 422 if not appropriate, 503 if the AI model is unavailable
   await enforceModeration(content, 'comment');
 
   const comment = await Comment.create({ user_id: req.user.id, post_id: post.id, content });
@@ -50,6 +51,7 @@ export const addComment = async (req, res) => {
       }),
     );
   }
+  await broadcastPostActivity({ postId: post.id, type: 'comment-added', actorId: req.user.id, commentId: comment.id });
 
   res.status(201).json({
     success: true,
@@ -93,6 +95,7 @@ export const updateComment = async (req, res) => {
 
   await enforceModeration(content, 'comment');
   await comment.update({ content });
+  await broadcastPostActivity({ postId: comment.post_id, type: 'comment-updated', actorId: req.user.id, commentId: comment.id });
 
   res.status(200).json({
     success: true,
@@ -116,6 +119,7 @@ export const deleteComment = async (req, res) => {
   }
 
   await comment.destroy();
+  await broadcastPostActivity({ postId: comment.post_id, type: 'comment-deleted', actorId: req.user.id, commentId: comment.id });
 
   res.status(200).json({
     success: true,

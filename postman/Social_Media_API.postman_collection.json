@@ -1237,7 +1237,7 @@
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"content\": \"Just shipped the backend for my AI-powered social platform! Node.js + PostgreSQL + Gemini. #buildinpublic\",\n  \"image_url\": \"https://picsum.photos/seed/launch/800/600\"\n}",
+              "raw": "{\n  \"content\": \"Just shipped the backend for my AI-powered social platform! Node.js + PostgreSQL + Ollama. #buildinpublic\",\n  \"image_url\": \"https://picsum.photos/seed/launch/800/600\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -1501,7 +1501,7 @@
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"content\": \"Just shipped the backend for my AI-powered social platform! Node.js + PostgreSQL + Gemini + Socket.IO. #buildinpublic\"\n}",
+              "raw": "{\n  \"content\": \"Just shipped the backend for my AI-powered social platform! Node.js + PostgreSQL + Ollama + Socket.IO. #buildinpublic\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -3247,7 +3247,7 @@
     },
     {
       "name": "13. AI",
-      "description": "Gemini-powered helpers. Returns 503 until GEMINI_API_KEY is set. Nothing is published automatically.",
+      "description": "AI helpers on the server's Ollama model. Return 503 while Ollama or OLLAMA_MODEL is unavailable. Nothing is published automatically.",
       "item": [
         {
           "name": "Generate Post",
@@ -3292,7 +3292,7 @@
                 "exec": [
                   "const save = (k, v) => { pm.collectionVariables.set(k, v); if (pm.environment.has(k)) pm.environment.set(k, v); };",
                   "const body = pm.response.json();",
-                  "pm.test('200 (AI configured) or 503 (GEMINI_API_KEY not set)', () => pm.expect(pm.response.code).to.be.oneOf([200, 503]));",
+                  "pm.test('200 (Ollama ready) or 503 (Ollama unavailable)', () => pm.expect(pm.response.code).to.be.oneOf([200, 503]));",
                   "if (pm.response.code === 200) { pm.test('Returns generated text', () => pm.expect(body.data.content).to.be.a('string').and.not.empty); }",
                   "else { pm.test('Explains that AI is not configured', () => pm.expect(body.message).to.match(/not configured|unavailable/)); }"
                 ]
@@ -3343,7 +3343,7 @@
                 "exec": [
                   "const save = (k, v) => { pm.collectionVariables.set(k, v); if (pm.environment.has(k)) pm.environment.set(k, v); };",
                   "const body = pm.response.json();",
-                  "pm.test('200 (AI configured) or 503 (GEMINI_API_KEY not set)', () => pm.expect(pm.response.code).to.be.oneOf([200, 503]));",
+                  "pm.test('200 (Ollama ready) or 503 (Ollama unavailable)', () => pm.expect(pm.response.code).to.be.oneOf([200, 503]));",
                   "if (pm.response.code === 200) { pm.test('Returns generated text', () => pm.expect(body.data.improved).to.be.a('string').and.not.empty); }",
                   "else { pm.test('Explains that AI is not configured', () => pm.expect(body.message).to.match(/not configured|unavailable/)); }"
                 ]
@@ -3394,7 +3394,7 @@
                 "exec": [
                   "const save = (k, v) => { pm.collectionVariables.set(k, v); if (pm.environment.has(k)) pm.environment.set(k, v); };",
                   "const body = pm.response.json();",
-                  "pm.test('200 (AI configured) or 503 (GEMINI_API_KEY not set)', () => pm.expect(pm.response.code).to.be.oneOf([200, 503]));",
+                  "pm.test('200 (Ollama ready) or 503 (Ollama unavailable)', () => pm.expect(pm.response.code).to.be.oneOf([200, 503]));",
                   "if (pm.response.code === 200) { pm.test('Returns generated text', () => pm.expect(body.data.summary).to.be.a('string').and.not.empty); }",
                   "else { pm.test('Explains that AI is not configured', () => pm.expect(body.message).to.match(/not configured|unavailable/)); }"
                 ]
@@ -3532,7 +3532,7 @@
                 "type": "text/javascript",
                 "exec": [
                   "const save = (k, v) => { pm.collectionVariables.set(k, v); if (pm.environment.has(k)) pm.environment.set(k, v); };",
-                  "pm.test('200, or 503 when GEMINI_API_KEY is not set', () => pm.expect([200, 503]).to.include(pm.response.code));",
+                  "pm.test('200, or 503 when Ollama is unavailable', () => pm.expect([200, 503]).to.include(pm.response.code));",
                   "if (pm.response.code === 200) pm.test('Summary returned, not published', () => { const b = pm.response.json(); pm.expect(b.data.summary).to.be.a('string'); pm.expect(b.meta.published).to.eql(false); });"
                 ]
               }
@@ -3568,7 +3568,7 @@
                 "moderate-content"
               ]
             },
-            "description": "Runs our own local model. Requires the local moderation service (npm run moderation). Without it the API answers 503 MODERATION_UNAVAILABLE."
+            "description": "Runs the AI moderation check (Ollama model) and returns a suggested version for inappropriate text. Without it the API answers 503 MODERATION_UNAVAILABLE."
           },
           "event": [
             {
@@ -3615,7 +3615,7 @@
                 "moderate-content"
               ]
             },
-            "description": "Requires the local moderation service (npm run moderation). Without it the API answers 503 MODERATION_UNAVAILABLE."
+            "description": "Requires a reachable Ollama model. Without it the API answers 503 MODERATION_UNAVAILABLE."
           },
           "event": [
             {
@@ -3661,7 +3661,7 @@
                 "posts"
               ]
             },
-            "description": "Moderation runs on the server before saving; calling the API directly cannot bypass it. Requires the local moderation service (npm run moderation). Without it the API answers 503 MODERATION_UNAVAILABLE."
+            "description": "Moderation runs on the server before saving; calling the API directly cannot bypass it. Requires a reachable Ollama model. Without it the API answers 503 MODERATION_UNAVAILABLE."
           },
           "event": [
             {
@@ -3673,7 +3673,7 @@
                   "const b = pm.response.json();",
                   "pm.test('Status 422', () => pm.response.to.have.status(422));",
                   "pm.test('CONTENT_MODERATION_FAILED', () => { pm.expect(b.code).to.eql('CONTENT_MODERATION_FAILED'); pm.expect(b.blocked).to.eql(true); pm.expect(b.moderation.category).to.eql('THREAT'); });",
-                  "pm.test('Message asks the user to edit', () => pm.expect(b.message).to.eql('Please remove inappropriate words from your content before publishing.'));"
+                  "pm.test('Message asks the user to edit', () => pm.expect(b.message).to.eql('Your content contains inappropriate language. Review the highlighted words and use the AI suggestion to make your content respectful.'));"
                 ]
               }
             }
@@ -3709,7 +3709,7 @@
                 "comments"
               ]
             },
-            "description": "Comments are moderated like posts. Requires the local moderation service (npm run moderation). Without it the API answers 503 MODERATION_UNAVAILABLE."
+            "description": "Comments are moderated like posts. Requires a reachable Ollama model. Without it the API answers 503 MODERATION_UNAVAILABLE."
           },
           "event": [
             {

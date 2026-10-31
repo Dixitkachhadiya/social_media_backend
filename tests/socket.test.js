@@ -126,3 +126,48 @@ describe('real-time notifications', () => {
     expect(missed.body.notifications.map((n) => n.type)).toEqual(['like']);
   });
 });
+
+describe('live post activity (likes and comments update without refreshing)', () => {
+  test('every connected user receives counts for likes, comments, edits and deletions, never content', async () => {
+    const author = await createUser();
+    const fan = await createUser();
+    const viewer = await createUser();
+    const post = await createPost(author.token, 'Live update test post');
+    const { client } = await connect(viewer.token);
+
+    const like = nextEvent(client, 'post:activity');
+    await api().post(`/api/posts/${post.id}/like`).set(auth(fan.token)).expect(201);
+    expect(await like).toEqual({ post_id: post.id, type: 'like', actor_id: fan.user.id, likes_count: 1, comments_count: 0 });
+
+    const added = nextEvent(client, 'post:activity');
+    const created = await api().post(`/api/posts/${post.id}/comments`).set(auth(fan.token)).send({ content: 'Nice one!' }).expect(201);
+    const addedEvent = await added;
+    expect(addedEvent).toMatchObject({ post_id: post.id, type: 'comment-added', comments_count: 1, comment_id: created.body.comment.id });
+    expect(JSON.stringify(addedEvent)).not.toContain('Nice one');
+
+    const edited = nextEvent(client, 'post:activity');
+    await api().put(`/api/comments/${created.body.comment.id}`).set(auth(fan.token)).send({ content: 'Nice one, edited' }).expect(200);
+    expect((await edited).type).toBe('comment-updated');
+
+    const removed = nextEvent(client, 'post:activity');
+    await api().delete(`/api/comments/${created.body.comment.id}`).set(auth(fan.token)).expect(200);
+    expect(await removed).toMatchObject({ type: 'comment-deleted', comments_count: 0 });
+
+    const unliked = nextEvent(client, 'post:activity');
+    await api().delete(`/api/posts/${post.id}/like`).set(auth(fan.token)).expect(200);
+    expect(await unliked).toMatchObject({ type: 'unlike', likes_count: 0 });
+
+    const deleted = nextEvent(client, 'post:activity');
+    await api().delete(`/api/posts/${post.id}`).set(auth(author.token)).expect(200);
+    expect(await deleted).toMatchObject({ type: 'post-deleted', post_id: post.id });
+  });
+
+  test('a refused (moderated) comment broadcasts nothing', async () => {
+    const author = await createUser();
+    const post = await createPost(author.token, 'Another post');
+    const { client } = await connect(author.token);
+    const silent = expectNoEvent(client, 'post:activity');
+    await api().post(`/api/posts/${post.id}/comments`).set(auth(author.token)).send({ content: 'you idiot' }).expect(422);
+    await silent;
+  });
+});

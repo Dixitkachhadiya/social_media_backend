@@ -69,10 +69,10 @@ export const moderationLimiter = limiter({
   message: 'Too many content checks. Please try again in a few minutes.',
 });
 
-// Summaries (local CPU work): per authenticated user
+// Generative AI requests (model inference is expensive): per authenticated user
 export const aiLimiter = limiter({
   windowMs: 15 * MINUTE,
-  limit: 60,
+  limit: 20,
   keyGenerator: (req) => `user:${req.user.id}`,
-  message: 'Summary limit reached. Please try again in 15 minutes.',
+  message: 'AI request limit reached. Please try again in 15 minutes.',
 });

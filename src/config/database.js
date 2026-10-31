@@ -2,6 +2,12 @@ import { Sequelize } from 'sequelize';
 
 const { DATABASE_URL, NODE_ENV } = process.env;
 
+// Connections per backend process. Hosted plans limit connections per database user (Clever Cloud's
+// free PostgreSQL: 5), and that limit is shared by every process using the same credentials (e.g. a
+// local backend and the Render backend). A pool larger than the limit makes concurrent requests fail;
+// a smaller pool only makes them wait their turn.
+const POOL_MAX = Number(process.env.DB_POOL_MAX) || 4;
+
 if (!DATABASE_URL) {
   throw new Error('DATABASE_URL is not defined. Add it to your .env file.');
 }
@@ -10,7 +16,7 @@ const sequelize = new Sequelize(DATABASE_URL, {
   dialect: 'postgres',
   logging: NODE_ENV === 'development' ? console.log : false,
   pool: {
-    max: 10,
+    max: POOL_MAX,
     min: 0,
     acquire: 30000,
     idle: 10000,

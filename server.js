@@ -6,7 +6,7 @@ import { sequelize } from './src/models/index.js';
 import { createMigrator } from './src/database/migrator.js';
 import { initSocket, closeSocket } from './src/socket/index.js';
 import { checkEmailTransport } from './src/services/emailService.js';
-import { moderationHealth } from './src/services/moderationService.js';
+import { ollamaHealth } from './src/services/ollamaService.js';
 import { describeCorsConfig } from './src/config/cors.js';
 
 const PORT = process.env.PORT || 5000;
@@ -28,12 +28,12 @@ const startServer = async () => {
     if (!cors.origins.length) console.warn('[cors] No browser origin is allowed. Set FRONTEND_URL to your frontend URL(s), comma-separated.');
 
     await checkEmailTransport();
-    // Loads the moderation model once, before the first request
-    const moderation = moderationHealth();
-    if (moderation.available) {
-      console.log(`[moderation] Local model loaded in-process: ${moderation.model} (${moderation.version}, ${moderation.load_ms} ms)`);
+    // AI model (Ollama): moderation of every post/comment, suggestions, summaries, writing help
+    const ai = await ollamaHealth();
+    if (ai.available) {
+      console.log(`[ai] ${ai.provider} model "${ai.model}" is connected (${ai.latency_ms} ms).`);
     } else {
-      console.error('[moderation] Local model could not be loaded. Posts and comments will be refused (503).');
+      console.warn(`[ai] ${ai.provider} is NOT ready (${ai.status}): ${ai.detail}. Posts and comments will be refused (503) until it is.`);
     }
 
     // Express and Socket.IO share one HTTP server

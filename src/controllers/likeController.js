@@ -4,6 +4,7 @@ import AppError from '../utils/AppError.js';
 import { getPagination, paginationMeta } from '../utils/pagination.js';
 import { findAccessiblePost, formatAuthor } from '../services/postService.js';
 import { notifySafely, createNotification } from '../services/notificationService.js';
+import { broadcastPostActivity } from '../services/liveUpdateService.js';
 
 const countLikes = (postId) => Like.count({ where: { post_id: postId } });
 
@@ -28,7 +29,9 @@ export const likePost = async (req, res) => {
     );
   }
 
-  res.status(201).json({ success: true, message: 'Post liked', liked: true, likes_count: await countLikes(post.id) });
+  const likesCount = await countLikes(post.id);
+  await broadcastPostActivity({ postId: post.id, type: 'like', actorId: req.user.id, likesCount });
+  res.status(201).json({ success: true, message: 'Post liked', liked: true, likes_count: likesCount });
 };
 
 // DELETE /api/posts/:id/like
@@ -41,7 +44,9 @@ export const unlikePost = async (req, res) => {
     throw new AppError('You have not liked this post', 404);
   }
 
-  res.status(200).json({ success: true, message: 'Post unliked', liked: false, likes_count: await countLikes(post.id) });
+  const likesCount = await countLikes(post.id);
+  await broadcastPostActivity({ postId: post.id, type: 'unlike', actorId: req.user.id, likesCount });
+  res.status(200).json({ success: true, message: 'Post unliked', liked: false, likes_count: likesCount });
 };
 
 // GET /api/posts/:id/likes
