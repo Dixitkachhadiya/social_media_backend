@@ -69,7 +69,7 @@ The server refuses to start while migrations are pending.
 | `TEST_DATABASE_URL` | for tests | Separate database for `npm test`; its name must contain `test` |
 | `JWT_SECRET` | yes | Long random secret for signing tokens |
 | `JWT_EXPIRES_IN` | no | Token lifetime (default `7d`) |
-| `FRONTEND_URL` | yes | Allowed CORS origin(s), comma-separated |
+| `FRONTEND_URL` | yes (production) | Browser origins allowed by CORS for the REST API and Socket.IO, comma-separated (e.g. `https://app.example.com,http://localhost:3000`). Unknown origins get `403` (preflight included) and cannot open a socket. Requests without an `Origin` header (curl, Postman, health checks) are unaffected. Empty: development allows `localhost:3000/5173`; production allows none |
 | `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS` | for email | SMTP server. Port 465 uses TLS, others use STARTTLS |
 | `EMAIL_FROM` | for email | Sender, e.g. `"AI Social <no-reply@example.com>"` |
 | `APP_NAME` | no | Brand name in emails (default `AI Social`) |

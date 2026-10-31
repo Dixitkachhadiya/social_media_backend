@@ -1,5 +1,5 @@
 import { Server } from 'socket.io';
-import { corsOptions } from '../config/cors.js';
+import { socketCorsOptions } from '../config/cors.js';
 import { authenticateToken } from '../middleware/authMiddleware.js';
 import AppError from '../utils/AppError.js';
 
@@ -20,8 +20,8 @@ let io = null;
  * Reconnecting clients fetch missed items from GET /api/notifications.
  */
 export const initSocket = (httpServer) => {
-  const { origin, credentials } = corsOptions();
-  io = new Server(httpServer, { cors: { origin, credentials } });
+  // Same allowed origins as the REST API (config/cors.js); unknown origins cannot open a socket
+  io = new Server(httpServer, socketCorsOptions());
 
   io.use(async (socket, next) => {
     try {

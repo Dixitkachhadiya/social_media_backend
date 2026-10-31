@@ -8,6 +8,7 @@ import { initSocket, closeSocket } from './src/socket/index.js';
 import { checkEmailTransport } from './src/services/emailService.js';
 import { moderationHealth } from './src/services/moderationClient.js';
 import { isAIConfigured } from './src/services/aiService.js';
+import { allowedOrigins } from './src/config/cors.js';
 
 const PORT = process.env.PORT || 5000;
 
@@ -20,6 +21,10 @@ const startServer = async () => {
     if (pending.length) {
       throw new Error(`Database has ${pending.length} pending migration(s). Run "npm run migrate" first.`);
     }
+
+    const origins = allowedOrigins();
+    if (origins.length) console.log(`[cors] Allowed origins: ${origins.join(', ')}`);
+    else console.warn('[cors] FRONTEND_URL is not set: browsers will be refused. Set it to your frontend URL(s).');
 
     await checkEmailTransport();
     if ((await moderationHealth()).available) {

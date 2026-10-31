@@ -20,6 +20,7 @@ const app = express();
 // Security middleware
 app.disable('x-powered-by');
 app.use(helmet());
+// CORS before rate limiting and routes, so preflights (OPTIONS), 429s and error responses carry CORS headers
 app.use(cors(corsOptions()));
 
 // Body parsing with size limits
