@@ -21,6 +21,15 @@ const sequelize = new Sequelize(DATABASE_URL, {
     acquire: 30000,
     idle: 10000,
   },
+  // When the database refuses a new connection because the per-user limit is reached (another process using
+  // the same credentials holds the rest), wait briefly and try again instead of failing the request. Only
+  // connection-limit errors are retried: the query itself never ran, so nothing executes twice.
+  retry: {
+    match: [/too many connections/i, /remaining connection slots/i, /ConnectionAcquireTimeoutError/],
+    max: 10, // about 6 s of waiting in total before the request fails with 503
+    backoffBase: 200,
+    backoffExponent: 1.3,
+  },
 });
 
 /**

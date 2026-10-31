@@ -9,6 +9,7 @@ import { setOllamaTransport } from '../src/services/ollamaService.js';
 import { fakeModeration, useFakeModeration } from './mockModeration.js';
 
 const BLOCKED_MESSAGE = 'Your content contains inappropriate language. Review the highlighted words and use the AI suggestion to make your content respectful.';
+const BLOCKED_COMMENT_MESSAGE = 'Your comment contains inappropriate language. Please review the highlighted words and use the suggested version before commenting.';
 
 let alice;
 let bob;
@@ -17,9 +18,12 @@ const seen = [];
 const publish = (token, content) => api().post('/api/posts').set(auth(token)).send({ content });
 const comment = (token, postId, content) => api().post(`/api/posts/${postId}/comments`).set(auth(token)).send({ content });
 
-const expectBlocked = (res, category) => {
+const expectBlocked = (res, category, kind = 'post') => {
   expect(res.status).toBe(422);
-  expect(res.body).toMatchObject({ success: false, blocked: true, allowed: false, code: 'CONTENT_MODERATION_FAILED', message: BLOCKED_MESSAGE });
+  expect(res.body).toMatchObject({
+    success: false, blocked: true, allowed: false, code: 'CONTENT_MODERATION_FAILED',
+    message: kind === 'comment' ? BLOCKED_COMMENT_MESSAGE : BLOCKED_MESSAGE,
+  });
   expect(res.body.category).toBe(res.body.moderation.category);
   if (category) expect(res.body.category).toBe(category);
   expect(res.body.flaggedWords.length).toBeGreaterThan(0);
@@ -125,19 +129,88 @@ describe('comments', () => {
   test('4. an inappropriate comment is refused with a suggestion, not saved, and does not notify the post owner', async () => {
     const before = await Comment.count();
     const res = await comment(alice.token, post.id, 'What an idiot take');
-    expectBlocked(res, 'PERSONAL_ABUSE');
+    expectBlocked(res, 'PERSONAL_ABUSE', 'comment');
     expect(res.body.suggestedText).toBeTruthy();
     expect(await Comment.count()).toBe(before);
     const notifications = await api().get('/api/notifications').set(auth(bob.token));
     expect(notifications.body.notifications.some((n) => n.message.includes('idiot'))).toBe(false);
   });
 
+  test('the example from the spec: flagged words, reason and a suggestion; applying it saves the comment', async () => {
+    setModerationEngine(async (text) => {
+      seen.push(text);
+      if (text === 'That person is a stupid idiot and knows nothing.') {
+        return { allowed: false, category: 'PERSONAL_ABUSE', flagged_words: ['stupid idiot'], reason: 'The comment contains personal insults.', suggested_text: "I strongly disagree with that person's opinion.", language: 'English' };
+      }
+      return fakeModeration(text);
+    });
+    const before = await Comment.count();
+    const refused = await comment(alice.token, post.id, 'That person is a stupid idiot and knows nothing.');
+    expectBlocked(refused, 'PERSONAL_ABUSE', 'comment');
+    expect(refused.body).toMatchObject({ flaggedWords: ['stupid idiot'], reason: 'The comment contains personal insults.', suggestedText: "I strongly disagree with that person's opinion." });
+    expect(refused.body.moderation.flagged_terms).toEqual([{ text: 'stupid idiot', start: 17, end: 29, category: 'PERSONAL_ABUSE' }]);
+    expect(await Comment.count()).toBe(before);
+
+    const saved = await comment(alice.token, post.id, refused.body.suggestedText);
+    expect(saved.status).toBe(201);
+    expect(saved.body.comment.content).toBe("I strongly disagree with that person's opinion.");
+  });
+
+  test('12. a resubmitted comment that is still inappropriate is refused again with a new suggestion', async () => {
+    const first = await comment(alice.token, post.id, 'You are an idiot and a damn fool');
+    expectBlocked(first, 'PERSONAL_ABUSE', 'comment');
+    // The user only removed one of the words
+    const second = await comment(alice.token, post.id, 'You are a damn fool');
+    expectBlocked(second, 'MILD_PROFANITY', 'comment');
+    expect(second.body.flaggedWords).toEqual(['damn']);
+    expect(second.body.suggestedText).toBeTruthy();
+    expect(second.body.suggestedText).not.toBe(first.body.suggestedText);
+  });
+
   test('6. editing a comment is moderated and the original kept when refused', async () => {
     const created = (await comment(alice.token, post.id, 'Nice photo!')).body.comment;
     const res = await api().put(`/api/comments/${created.id}`).set(auth(alice.token)).send({ content: 'Nice photo, idiot' });
-    expectBlocked(res, 'PERSONAL_ABUSE');
+    expectBlocked(res, 'PERSONAL_ABUSE', 'comment');
     expect((await Comment.findByPk(created.id)).content).toBe('Nice photo!');
     expect((await api().put(`/api/comments/${created.id}`).set(auth(bob.token)).send({ content: 'x' })).status).toBe(403);
+  });
+
+  test('13. direct API calls cannot bypass comment moderation (allowed: true, moderation, headers)', async () => {
+    const before = await Comment.count();
+    for (const extra of [{ allowed: true }, { moderation: { allowed: true, blocked: false } }]) {
+      const res = await api().post(`/api/posts/${post.id}/comments`).set(auth(alice.token)).send({ content: 'you idiot', ...extra });
+      expect(res.status).toBe(400);
+      expect(res.body.message).toMatch(/Unknown fields/);
+    }
+    const created = (await comment(alice.token, post.id, 'Fine comment')).body.comment;
+    const edit = await api().put(`/api/comments/${created.id}`).set(auth(alice.token)).send({ content: 'you idiot', allowed: true });
+    expect(edit.status).toBe(400);
+    const header = await api().post(`/api/posts/${post.id}/comments`).set(auth(alice.token)).set('X-Moderation-Passed', 'true').send({ content: 'you idiot' });
+    expectBlocked(header, 'PERSONAL_ABUSE', 'comment');
+    expect(await Comment.count()).toBe(before + 1); // only "Fine comment"
+  });
+
+  test('14. Ollama unavailable while commenting: 503, nothing saved, the user can retry', async () => {
+    const errorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+    try {
+      setModerationEngine(async () => { throw Object.assign(new Error('unreachable'), { code: 'UNREACHABLE' }); });
+      const before = await Comment.count();
+      const res = await comment(alice.token, post.id, 'A normal comment while the model is down');
+      expect(res.status).toBe(503);
+      expect(res.body.code).toBe('MODERATION_UNAVAILABLE');
+      expect(await Comment.count()).toBe(before);
+      useFakeModeration();
+      expect((await comment(alice.token, post.id, 'A normal comment while the model is down')).status).toBe(201);
+    } finally {
+      errorSpy.mockRestore();
+    }
+  });
+
+  test('Recheck comment (moderate-content with kind=comment) uses the comment wording', async () => {
+    const res = await api().post('/api/ai/moderate-content').set(auth(alice.token)).send({ content: 'you idiot', kind: 'comment' });
+    expect(res.status).toBe(200);
+    expect(res.body.data).toMatchObject({ allowed: false, message: BLOCKED_COMMENT_MESSAGE });
+    expect((await api().post('/api/ai/moderate-content').set(auth(alice.token)).send({ content: 'x', kind: 'tweet' })).status).toBe(400);
   });
 });
 

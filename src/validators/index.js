@@ -203,4 +203,8 @@ export const summarizeRules = [
 ];
 
 // Text checked by the content check (same limit as a post)
-export const contentCheckRules = [text('content', 'Content', POST_MAX_LENGTH)];
+// kind (post | comment) only selects the wording of the message; the check is the same
+export const contentCheckRules = [
+  text('content', 'Content', POST_MAX_LENGTH),
+  body('kind').optional().isIn(['post', 'comment']).withMessage('kind must be post or comment'),
+];

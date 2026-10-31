@@ -23,6 +23,6 @@ router.post('/improve-post', aiLimiter, allowOnlyFields('content', 'tone'), vali
 router.post('/summarize', aiLimiter, allowOnlyFields('postId', 'content', 'length'), validate(summarizeRules), summarizeHandler);
 
 // Content check with suggestion (Ollama model); the same check runs again on every post/comment save
-router.post('/moderate-content', moderationLimiter, allowOnlyFields('content'), validate(contentCheckRules), moderateContentHandler);
+router.post('/moderate-content', moderationLimiter, allowOnlyFields('content', 'kind'), validate(contentCheckRules), moderateContentHandler);
 
 export default router;

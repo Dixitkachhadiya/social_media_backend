@@ -3,7 +3,7 @@ import { Comment, User } from '../models/index.js';
 import { findAccessiblePost } from '../services/postService.js';
 import { generatePost, improvePost } from '../services/aiWritingService.js';
 import { summarizeDiscussion, summarizeText, SUMMARY_LIMITS } from '../services/summarizationService.js';
-import { checkContent, BLOCKED_MESSAGE, CLEAN_MESSAGE } from '../services/moderationService.js';
+import { checkContent, blockedMessage, CLEAN_MESSAGE } from '../services/moderationService.js';
 import { ollamaConfig, ollamaHealth } from '../services/ollamaService.js';
 
 // AI output is returned as a suggestion only; publishing is a separate, explicit POST /api/posts (moderated)
@@ -102,7 +102,7 @@ export const summarizeHandler = async (req, res) => {
 // POST /api/ai/moderate-content  { content }  -> the same check that runs when a post/comment is saved,
 // including the suggested respectful version. Informational only: saving always checks again.
 export const moderateContentHandler = async (req, res) => {
-  const { content } = matchedData(req);
+  const { content, kind = 'post' } = matchedData(req);
   const moderation = await checkContent(content);
   res.status(200).json({
     success: true,
@@ -111,7 +111,7 @@ export const moderateContentHandler = async (req, res) => {
       reason: moderation.explanation,
       flaggedWords: moderation.flagged_words,
       suggestedText: moderation.suggested_text,
-      message: moderation.blocked ? BLOCKED_MESSAGE : CLEAN_MESSAGE,
+      message: moderation.blocked ? blockedMessage(kind) : CLEAN_MESSAGE,
     },
   });
 };

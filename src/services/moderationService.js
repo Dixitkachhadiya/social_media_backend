@@ -16,6 +16,8 @@ import { chat, ollamaConfig, toAppError } from './ollamaService.js';
  */
 
 export const BLOCKED_MESSAGE = 'Your content contains inappropriate language. Review the highlighted words and use the AI suggestion to make your content respectful.';
+export const BLOCKED_COMMENT_MESSAGE = 'Your comment contains inappropriate language. Please review the highlighted words and use the suggested version before commenting.';
+export const blockedMessage = (kind) => (kind === 'comment' ? BLOCKED_COMMENT_MESSAGE : BLOCKED_MESSAGE);
 export const CLEAN_MESSAGE = 'Your content looks good.';
 export const UNAVAILABLE_MESSAGE = 'Content checking is temporarily unavailable. Please try again in a moment.';
 
@@ -268,7 +270,7 @@ export const enforceModeration = async (content, kind) => {
   if (moderation.blocked) {
     // Outcome only; the content itself is never logged
     console.info(`[moderation] ${kind} refused: ${moderation.category}`);
-    throw new AppError(BLOCKED_MESSAGE, 422, {
+    throw new AppError(blockedMessage(kind), 422, {
       code: 'CONTENT_MODERATION_FAILED',
       details: {
         blocked: true,

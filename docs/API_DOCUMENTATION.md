@@ -76,7 +76,7 @@ The server refuses to start while migrations are pending.
 | `EMAIL_FROM` | for email | Sender, e.g. `"AI Social <no-reply@example.com>"` |
 | `APP_NAME` | no | Brand name in emails (default `AI Social`) |
 | `OTP_SECRET` | no | Secret for hashing one-time codes (defaults to `JWT_SECRET`) |
-| `DB_POOL_MAX` | no | Database connections per backend process (default `4`). Hosted plans cap connections per database user (Clever Cloud free: 5) and every process using the same credentials shares that cap |
+| `DB_POOL_MAX` | no | Database connections per backend process (default `4`). Hosted plans cap connections per database user (Clever Cloud free: 5) and every process using the same credentials shares that cap. When the database refuses a connection for that reason, the query is retried with backoff (up to about 6 s) before the request fails with `503 DATABASE_BUSY` |
 | `OLLAMA_BASE_URL` | yes | `https://ollama.com` (Ollama Cloud) or `http://localhost:11434` (local Ollama, development only) |
 | `OLLAMA_MODEL` | yes | Model name as listed by `GET /api/tags`, e.g. `gemma4:31b` on Ollama Cloud |
 | `OLLAMA_API_KEY` | for Ollama Cloud | Sent as `Authorization: Bearer <key>`; never sent to the frontend or logged. Create it at <https://ollama.com/settings/keys> |
@@ -1466,7 +1466,9 @@ respectful alternative that keeps the author's meaning, language and script.
 Calling the API directly cannot bypass the check. Fields such as `moderation` in the request body are rejected
 (`400 Unknown fields`), and moderation results sent by a client are never used: the submitted text is always checked.
 
-**Refused (`422`):** nothing is saved.
+**Refused (`422`):** nothing is saved. For comments the message is
+"Your comment contains inappropriate language. Please review the highlighted words and use the suggested version
+before commenting."; the response is otherwise the same.
 
 ```json
 {
@@ -1518,7 +1520,7 @@ The "Check" / "Recheck content" button. Same model, prompt and validation as sav
 | | |
 |---|---|
 | Auth | JWT / any |
-| Body | `{ "content": "..." }` (1–5000 chars; no other fields) |
+| Body | `{ "content": "...", "kind": "post" \| "comment" }` (content 1–5000 chars; `kind` is optional and only selects the wording of `message`) |
 | Status | `200`; `400`; `401`; `429` (120 / 15 min / user); `503`; `504` |
 
 Response `200`: `{ "success": true, "data": { ...moderation object above, "reason", "flaggedWords", "suggestedText", "message" } }`
