@@ -20,3 +20,25 @@ test.each([
   expect(res.headers['Retry-After']).toBe('5');
   expect(res.body).toMatchObject({ success: false, code: 'DATABASE_BUSY' });
 });
+
+test('stack traces are only returned on a local development machine, never on Render or in production', () => {
+  const spy = jest.spyOn(console, 'error').mockImplementation(() => {});
+  const saved = { env: process.env.NODE_ENV, render: process.env.RENDER };
+  try {
+    const boom = new Error('boom at /opt/render/project/src/file.js');
+    process.env.NODE_ENV = 'development';
+    delete process.env.RENDER;
+    expect(respond(boom).body.stack).toBeDefined();
+    process.env.RENDER = 'true'; // Render sets this on its servers
+    const onRender = respond(boom).body;
+    expect(onRender).toEqual({ success: false, message: 'Internal Server Error' });
+    process.env.NODE_ENV = 'production';
+    delete process.env.RENDER;
+    expect(respond(boom).body).toEqual({ success: false, message: 'Internal Server Error' });
+  } finally {
+    process.env.NODE_ENV = saved.env;
+    if (saved.render === undefined) delete process.env.RENDER;
+    else process.env.RENDER = saved.render;
+    spy.mockRestore();
+  }
+});

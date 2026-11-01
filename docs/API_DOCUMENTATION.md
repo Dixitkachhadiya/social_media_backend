@@ -73,6 +73,7 @@ The server refuses to start while migrations are pending.
 | `JWT_EXPIRES_IN` | no | Token lifetime (default `7d`) |
 | `FRONTEND_URL` | yes (production) | Browser origins allowed by CORS for the REST API and Socket.IO, comma-separated (e.g. `https://app.example.com,http://localhost:3000`). Unknown origins get `403` (preflight included) and cannot open a socket. Requests without an `Origin` header (curl, Postman, health checks) are unaffected. Empty: development allows `localhost:3000/5173`; production allows none |
 | `SMTP_USER`, `SMTP_PASS` | for email | SMTP login. For Gmail: the full address and a 16-letter App Password |
+| `BREVO_API_KEY` | on free Render | Sends email through Brevo's HTTPS API instead of SMTP (free Render web services block outbound SMTP ports 25/465/587). When set, `SMTP_*` are ignored and `EMAIL_FROM` must be a sender verified in Brevo |
 | `SMTP_HOST`, `SMTP_PORT` | not for Gmail | SMTP server (default for a Gmail `SMTP_USER`: `smtp.gmail.com`, port `587`). Port 465 uses TLS, others use STARTTLS |
 | `EMAIL_FROM` | for email | Sender, e.g. `"AI Social <no-reply@example.com>"` |
 | `APP_NAME` | no | Brand name in emails (default `AI Social`) |

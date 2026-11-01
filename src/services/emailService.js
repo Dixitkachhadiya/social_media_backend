@@ -10,8 +10,56 @@ const isGmailAddress = (value) => /@(gmail|googlemail)\.com$/i.test((value || ''
 const smtpHost = () => process.env.SMTP_HOST || (isGmailAddress(process.env.SMTP_USER) ? 'smtp.gmail.com' : '');
 const smtpPort = () => Number(process.env.SMTP_PORT) || 587;
 
+// With BREVO_API_KEY set, email goes through Brevo's HTTPS API (port 443) instead of SMTP. Needed where outbound
+// SMTP is blocked, e.g. free Render web services (ports 25/465/587). The sender in EMAIL_FROM must be verified in Brevo.
+const useBrevo = () => Boolean(process.env.BREVO_API_KEY);
+const BREVO_API = 'https://api.brevo.com/v3';
+
 // SMTP_USER/SMTP_PASS are optional for servers without authentication
-export const isEmailConfigured = () => Boolean(smtpHost() && process.env.EMAIL_FROM);
+export const isEmailConfigured = () => Boolean((useBrevo() || smtpHost()) && process.env.EMAIL_FROM);
+
+// "Circlo <app@gmail.com>" -> { name: 'Circlo', email: 'app@gmail.com' }
+const parseAddress = (value) => {
+  const match = /^\s*"?([^"<]*?)"?\s*<([^>]+)>\s*$/.exec(value || '');
+  return match ? { name: match[1].trim() || undefined, email: match[2].trim() } : { email: (value || '').trim() };
+};
+
+const brevoError = (status, body) => {
+  const error = new Error(`Brevo API responded ${status}${body?.code ? ` ${body.code}` : ''}${body?.message ? `: ${body.message}` : ''}`);
+  // Rejected API key: reported like an SMTP login failure (EAUTH)
+  error.code = status === 401 || status === 403 || /unauthori[sz]ed|api-key|authentication/i.test(body?.code || '') ? 'EAUTH' : 'EBREVO';
+  error.responseCode = status;
+  return error;
+};
+
+const brevoRequest = async (path, { method = 'GET', body } = {}) => {
+  let response;
+  try {
+    response = await fetch(`${BREVO_API}${path}`, {
+      method,
+      headers: { 'api-key': process.env.BREVO_API_KEY, accept: 'application/json', ...(body && { 'content-type': 'application/json' }) },
+      body: body && JSON.stringify(body),
+      signal: AbortSignal.timeout(15_000),
+    });
+  } catch (error) {
+    throw Object.assign(new Error(`Brevo API not reachable (${error.name === 'TimeoutError' ? 'timeout' : error.cause?.code || error.message})`), { code: 'ECONNECTION' });
+  }
+  const json = await response.json().catch(() => null);
+  if (!response.ok) throw brevoError(response.status, json);
+  return json;
+};
+
+// Same interface as a Nodemailer transporter (verify, sendMail), so the rest of this module is unchanged
+const brevoTransport = {
+  verify: () => brevoRequest('/account').then(() => true),
+  sendMail: async ({ from, to, subject, text, html }) => {
+    const result = await brevoRequest('/smtp/email', {
+      method: 'POST',
+      body: { sender: parseAddress(from), to: [{ email: to }], subject, htmlContent: html, textContent: text },
+    });
+    return { accepted: [to], rejected: [], messageId: result?.messageId };
+  },
+};
 
 // Google shows App Passwords as "abcd efgh ijkl mnop"; the real password has no spaces
 const smtpPassword = () => {
@@ -21,6 +69,7 @@ const smtpPassword = () => {
 
 // Created lazily, after env.js has loaded Backend/.env; a restart picks up new .env values
 const getTransporter = () => {
+  if (!transporter && useBrevo()) transporter = brevoTransport;
   if (!transporter) {
     const port = smtpPort();
     transporter = nodemailer.createTransport({
@@ -57,8 +106,10 @@ const describeSmtpError = (error) =>
 const deliveryError = (error) => {
   // Development only: say *why*, so a misconfigured .env is obvious. Production stays generic.
   const hint =
-    process.env.NODE_ENV === 'development' && isAuthError(error)
-      ? ' (development: the SMTP server rejected SMTP_USER/SMTP_PASS. For Gmail, SMTP_PASS must be an App Password.)'
+    process.env.NODE_ENV === 'development' && !process.env.RENDER && isAuthError(error)
+      ? useBrevo()
+        ? ' (development: Brevo rejected BREVO_API_KEY.)'
+        : ' (development: the SMTP server rejected SMTP_USER/SMTP_PASS. For Gmail, SMTP_PASS must be an App Password.)'
       : '';
   return new AppError(`Could not send email. Please try again later.${hint}`, 502);
 };
@@ -70,19 +121,23 @@ const deliveryError = (error) => {
 export const verifySmtpConnection = async () => {
   if (!isEmailConfigured()) {
     health = { ok: false, checkedAt: Date.now(), error: null };
-    console.error('[email] SMTP is not configured (EMAIL_FROM, or SMTP_HOST for a non-Gmail SMTP_USER, is missing). Verification and password reset emails cannot be sent.');
+    console.error('[email] Email is not configured (EMAIL_FROM, or BREVO_API_KEY / SMTP_HOST for a non-Gmail SMTP_USER, is missing). Verification and password reset emails cannot be sent.');
     return { ok: false, error: null };
   }
   try {
     await getTransporter().verify();
     health = { ok: true, checkedAt: Date.now(), error: null };
-    logInfo(`[email] SMTP connection successful (${smtpHost()}:${smtpPort()})`);
+    logInfo(`[email] ${useBrevo() ? 'Brevo API connection successful (HTTPS)' : `SMTP connection successful (${smtpHost()}:${smtpPort()})`}`);
     return { ok: true, error: null };
   } catch (error) {
     health = { ok: false, checkedAt: Date.now(), error };
-    console.error(`[email] SMTP connection failed: ${describeSmtpError(error)}`);
-    if (isAuthError(error)) {
+    console.error(`[email] ${useBrevo() ? 'Brevo API' : 'SMTP'} connection failed: ${describeSmtpError(error)}`);
+    if (useBrevo()) {
+      if (isAuthError(error)) console.error('[email] Brevo rejected the API key. Check BREVO_API_KEY (Brevo: SMTP & API -> API keys).');
+    } else if (isAuthError(error)) {
       console.error('[email] The SMTP server rejected the login. For Gmail use the full address as SMTP_USER and a 16-letter App Password as SMTP_PASS.');
+    } else if (process.env.RENDER && ['ETIMEDOUT', 'ECONNECTION', 'ESOCKET', 'ECONNREFUSED'].includes(error.code)) {
+      console.error('[email] The SMTP server could not be reached from Render. Free Render web services block outbound SMTP ports 25, 465 and 587: use a paid instance or an email API over HTTPS.');
     }
     return { ok: false, error };
   }

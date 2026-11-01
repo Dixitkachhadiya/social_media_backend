@@ -60,6 +60,7 @@ export const errorHandler = (err, req, res, next) => {
     ...(error.errors && { errors: error.errors }),
     ...(error instanceof AppError && error.code && { code: error.code }),
     ...(error instanceof AppError && error.details),
-    ...(process.env.NODE_ENV === 'development' && statusCode >= 500 && { stack: err.stack }),
+    // Stack traces only on a developer's machine: never on Render (it sets RENDER), even if NODE_ENV is wrong there
+    ...(process.env.NODE_ENV === 'development' && !process.env.RENDER && statusCode >= 500 && { stack: err.stack }),
   });
 };
