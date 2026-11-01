@@ -34,18 +34,21 @@ describe('email verification with a 6-digit code', () => {
     expect(res.body).toMatchObject({
       message: 'A verification code has been sent to your email address.',
       email_delivered: true,
-      expires_in_seconds: 600,
+      expires_in_seconds: 300,
       resend_after_seconds: 60,
     });
     expect(res.body.email).toMatch(/^ot\*+@test\.com$/);
 
     const email = lastEmail(user.email);
-    expect(email.subject).toBe('Verify Your AI Social Account');
+    expect(email.subject).toBe('Verify Your AI-Powered Social Media Platform Account');
     const otp = lastEmailOtp(user.email);
     expect(otp).toMatch(/^\d{6}$/);
     expect(email.html).toContain(otp);
     expect(email.html).toContain(user.username);
-    expect(email.html).toContain('10 minutes');
+    expect(email.html).toContain('5 minutes');
+    expect(email.html).toContain('AI-Powered Social Media Platform');
+    expect(email.html).toContain('Never share this code with anyone.');
+    expect(email.text).toContain('Never share this code with anyone.');
     expect(email.html).toContain('If you did not request this code, you can safely ignore this email.');
     // Never exposed in the API response, never stored in plain text, no JWT in the email
     expect(JSON.stringify(res.body)).not.toContain(otp);
@@ -53,8 +56,8 @@ describe('email verification with a 6-digit code', () => {
     const record = await EmailVerification.findOne({ where: { user_id: user.id } });
     expect(record.token_hash).toBe(hashOtp({ recordId: record.id, purpose: 'email_verification', otp }));
     expect(record.token_hash).not.toContain(otp);
-    // Valid for 10 minutes (created_at is stamped a few ms after the expiry is computed)
-    expect(Math.abs(record.expires_at.getTime() - record.created_at.getTime() - 10 * 60 * 1000)).toBeLessThan(1000);
+    // Valid for 5 minutes (created_at is stamped a few ms after the expiry is computed)
+    expect(Math.abs(record.expires_at.getTime() - record.created_at.getTime() - 5 * 60 * 1000)).toBeLessThan(1000);
   });
 
   test('2 & 5. the correct code verifies the email once; the code cannot be reused', async () => {
@@ -174,11 +177,11 @@ describe('password reset with a 6-digit code', () => {
 
     expect(known.status).toBe(200);
     expect(known.body).toEqual(unknown.body);
-    expect(known.body).toMatchObject({ expires_in_seconds: 600, resend_after_seconds: 60 });
+    expect(known.body).toMatchObject({ expires_in_seconds: 300, resend_after_seconds: 60 });
     expect(emailCount('ghost@example.com')).toBe(0);
 
     const email = lastEmail(user.email);
-    expect(email.subject).toBe('Reset Your AI Social Password');
+    expect(email.subject).toBe('Reset Your AI-Powered Social Media Platform Password');
     expect(email.html).toContain('If you did not request a password reset, do not share this code.');
     expect(JSON.stringify(known.body)).not.toContain(lastEmailOtp(user.email));
   });
@@ -456,7 +459,7 @@ describe('8 & 9. SMTP failures never report a delivered email', () => {
     expect(lastEmail(user.email)).toMatchObject({
       to: user.email,
       from: 'AI Social <no-reply@test.local>',
-      subject: 'Verify Your AI Social Account',
+      subject: 'Verify Your AI-Powered Social Media Platform Account',
     });
   });
 });

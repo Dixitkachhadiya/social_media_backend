@@ -4,21 +4,27 @@ import { maskEmail } from '../utils/otp.js';
 
 let transporter;
 
+// SMTP_HOST may be omitted for a Gmail account: SMTP_USER=<address>@gmail.com then means smtp.gmail.com
+// (port 587, STARTTLS). Any other provider needs SMTP_HOST (and usually SMTP_PORT).
+const isGmailAddress = (value) => /@(gmail|googlemail)\.com$/i.test((value || '').trim());
+const smtpHost = () => process.env.SMTP_HOST || (isGmailAddress(process.env.SMTP_USER) ? 'smtp.gmail.com' : '');
+const smtpPort = () => Number(process.env.SMTP_PORT) || 587;
+
 // SMTP_USER/SMTP_PASS are optional for servers without authentication
-export const isEmailConfigured = () => Boolean(process.env.SMTP_HOST && process.env.EMAIL_FROM);
+export const isEmailConfigured = () => Boolean(smtpHost() && process.env.EMAIL_FROM);
 
 // Google shows App Passwords as "abcd efgh ijkl mnop"; the real password has no spaces
 const smtpPassword = () => {
   const pass = process.env.SMTP_PASS || '';
-  return /(^|\.)gmail\.com$/i.test(process.env.SMTP_HOST || '') ? pass.replace(/\s+/g, '') : pass;
+  return /(^|\.)gmail\.com$/i.test(smtpHost()) ? pass.replace(/\s+/g, '') : pass;
 };
 
 // Created lazily, after env.js has loaded Backend/.env; a restart picks up new .env values
 const getTransporter = () => {
   if (!transporter) {
-    const port = Number(process.env.SMTP_PORT) || 587;
+    const port = smtpPort();
     transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST,
+      host: smtpHost(),
       port,
       // 465: implicit TLS. Any other port (e.g. Gmail's 587): secure=false + STARTTLS required, never plain text.
       secure: port === 465,
@@ -64,13 +70,13 @@ const deliveryError = (error) => {
 export const verifySmtpConnection = async () => {
   if (!isEmailConfigured()) {
     health = { ok: false, checkedAt: Date.now(), error: null };
-    console.error('[email] SMTP is not configured (SMTP_HOST/EMAIL_FROM missing). Verification and password reset emails cannot be sent.');
+    console.error('[email] SMTP is not configured (EMAIL_FROM, or SMTP_HOST for a non-Gmail SMTP_USER, is missing). Verification and password reset emails cannot be sent.');
     return { ok: false, error: null };
   }
   try {
     await getTransporter().verify();
     health = { ok: true, checkedAt: Date.now(), error: null };
-    logInfo(`[email] SMTP connection successful (${process.env.SMTP_HOST}:${Number(process.env.SMTP_PORT) || 587})`);
+    logInfo(`[email] SMTP connection successful (${smtpHost()}:${smtpPort()})`);
     return { ok: true, error: null };
   } catch (error) {
     health = { ok: false, checkedAt: Date.now(), error };
@@ -146,7 +152,8 @@ export const checkEmailTransport = async () => (await verifySmtpConnection()).ok
 const escapeHtml = (value) =>
   String(value).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 
-const BRAND = () => process.env.APP_NAME || 'AI Social';
+const BRAND = () => process.env.APP_NAME || 'AI-Powered Social Media Platform';
+const NEVER_SHARE = 'Never share this code with anyone. We will never ask you for it.';
 
 /**
  * Responsive, email-client-safe HTML (tables + inline styles) with a plain-text alternative.
@@ -165,7 +172,8 @@ const otpEmail = ({ preheader, heading, username, intro, otp, expiry, warning })
     '',
     `Your code: ${otp}`,
     '',
-    `This code expires in ${expiry}.`,
+    `This code expires in ${expiry} and can be used only once.`,
+    NEVER_SHARE,
     warning,
     '',
     `© ${year} ${brand}. This is an automated message, please do not reply.`,
@@ -206,7 +214,8 @@ const otpEmail = ({ preheader, heading, username, intro, otp, expiry, warning })
                 </td>
               </tr>
             </table>
-            <p style="margin:20px 0 0;font-size:14px;line-height:1.6;">This code expires in <strong>${escapeHtml(expiry)}</strong> and can be used once.</p>
+            <p style="margin:20px 0 0;font-size:14px;line-height:1.6;">This code expires in <strong>${escapeHtml(expiry)}</strong> and can be used only once.</p>
+            <p style="margin:12px 0 0;font-size:14px;line-height:1.6;color:#b91c1c;font-weight:600;">${escapeHtml(NEVER_SHARE)}</p>
             <p style="margin:16px 0 0;padding:12px 14px;background:#f8fafc;border-radius:8px;font-size:13px;line-height:1.6;color:#475569;">${escapeHtml(warning)}</p>
           </td>
         </tr>

@@ -2,11 +2,10 @@ import { matchedData } from 'express-validator';
 import { User, EmailVerification } from '../models/index.js';
 import AppError from '../utils/AppError.js';
 import { maskEmail } from '../utils/otp.js';
-import { issueOtp, verifyOtp, discardToken, OTP_TTL_MS, RESEND_COOLDOWN_SECONDS } from '../services/authTokenService.js';
+import { issueOtp, verifyOtp, discardToken, OTP_TTL_MS, OTP_TTL_TEXT, RESEND_COOLDOWN_SECONDS } from '../services/authTokenService.js';
 import { ensureEmailDeliverable, sendVerificationOtpEmail } from '../services/emailService.js';
 
 const PURPOSE = 'email_verification';
-const OTP_TTL_TEXT = '10 minutes';
 
 const GENERIC_RESEND_MESSAGE =
   'If an unverified account exists for this email, a verification code has been sent.';

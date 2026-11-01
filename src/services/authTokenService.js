@@ -7,8 +7,9 @@ import { generateOtp, hashOtp, otpMatches } from '../utils/otp.js';
 
 // Minimum time between two codes of the same kind for one user
 export const RESEND_COOLDOWN_SECONDS = 60;
-// OTP codes are valid for 10 minutes
-export const OTP_TTL_MS = 10 * 60 * 1000;
+// OTP codes (and the password-reset session granted after a correct code) are valid for 5 minutes
+export const OTP_TTL_MS = 5 * 60 * 1000;
+export const OTP_TTL_TEXT = `${OTP_TTL_MS / 60000} minutes`;
 // Incorrect guesses allowed per code before it is invalidated
 export const MAX_OTP_ATTEMPTS = 5;
 

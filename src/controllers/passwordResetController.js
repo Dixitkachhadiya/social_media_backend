@@ -9,12 +9,12 @@ import {
   findValidToken,
   consumeUserTokens,
   OTP_TTL_MS,
+  OTP_TTL_TEXT,
   RESEND_COOLDOWN_SECONDS,
 } from '../services/authTokenService.js';
 import { ensureEmailDeliverable, sendPasswordResetOtpEmail } from '../services/emailService.js';
 
 const PURPOSE = 'password_reset';
-const OTP_TTL_TEXT = '10 minutes';
 const OTP_SCOPE = { kind: 'otp' };
 const SESSION_SCOPE = { kind: 'session' };
 
@@ -56,7 +56,7 @@ export const forgotPassword = async (req, res) => {
   });
 };
 
-// POST /api/auth/verify-reset-otp { email, otp } -> single-use reset token (10 minutes)
+// POST /api/auth/verify-reset-otp { email, otp } -> single-use reset token (5 minutes)
 export const verifyResetOtp = async (req, res) => {
   const { email, otp } = matchedData(req);
 

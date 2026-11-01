@@ -72,7 +72,8 @@ The server refuses to start while migrations are pending.
 | `JWT_SECRET` | yes | Long random secret for signing tokens |
 | `JWT_EXPIRES_IN` | no | Token lifetime (default `7d`) |
 | `FRONTEND_URL` | yes (production) | Browser origins allowed by CORS for the REST API and Socket.IO, comma-separated (e.g. `https://app.example.com,http://localhost:3000`). Unknown origins get `403` (preflight included) and cannot open a socket. Requests without an `Origin` header (curl, Postman, health checks) are unaffected. Empty: development allows `localhost:3000/5173`; production allows none |
-| `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS` | for email | SMTP server. Port 465 uses TLS, others use STARTTLS |
+| `SMTP_USER`, `SMTP_PASS` | for email | SMTP login. For Gmail: the full address and a 16-letter App Password |
+| `SMTP_HOST`, `SMTP_PORT` | not for Gmail | SMTP server (default for a Gmail `SMTP_USER`: `smtp.gmail.com`, port `587`). Port 465 uses TLS, others use STARTTLS |
 | `EMAIL_FROM` | for email | Sender, e.g. `"AI Social <no-reply@example.com>"` |
 | `APP_NAME` | no | Brand name in emails (default `AI Social`) |
 | `OTP_SECRET` | no | Secret for hashing one-time codes (defaults to `JWT_SECRET`) |
@@ -86,13 +87,13 @@ The server refuses to start while migrations are pending.
 | `OLLAMA_NUM_CTX` | no | Context window in tokens (default `8192`) |
 | `OLLAMA_KEEP_ALIVE` | no | Local Ollama only: how long the model stays in memory (default `30m`) |
 
-**Gmail:** `SMTP_HOST=smtp.gmail.com`, `SMTP_PORT=587` (STARTTLS is required), `SMTP_USER` = the full Gmail address, `SMTP_PASS` = a 16-character [App Password](https://myaccount.google.com/apppasswords) (needs 2-Step Verification; the normal account password is rejected with `535`). Spaces in the App Password are ignored.
+**Gmail:** `SMTP_HOST` and `SMTP_PORT` can be omitted (`smtp.gmail.com:587`, STARTTLS required), `SMTP_USER` = the full Gmail address, `SMTP_PASS` = a 16-character [App Password](https://myaccount.google.com/apppasswords) (needs 2-Step Verification; the normal account password is rejected with `535`). Spaces in the App Password are ignored.
 
 **Delivery is always real.** There is no development fallback: codes are never printed to the server log or returned by the API.
 Before a code is issued, the server checks the SMTP connection and login with `transporter.verify()` (a success is cached for 5 minutes, a failure for 30 seconds), so no code exists unless it can be emailed.
 An email counts as delivered only when the SMTP server accepts the recipient.
 
-- SMTP not configured (`SMTP_HOST` or `EMAIL_FROM` missing): code-sending endpoints return `503`.
+- SMTP not configured (`EMAIL_FROM` missing, or `SMTP_HOST` missing for a non-Gmail `SMTP_USER`): code-sending endpoints return `503`.
 - SMTP login or connection failure (e.g. Gmail `535`): `502` `"Could not send email. Please try again later."` In development the message adds a hint about `SMTP_USER`/`SMTP_PASS`.
 - The server log shows `SMTP connection successful`, `Verification email delivered successfully to pr***@example.com`, or the SMTP error code. It never shows codes or credentials.
 
@@ -382,7 +383,7 @@ curl http://localhost:5000/api/auth/me -H "Authorization: Bearer $TOKEN"
 Verification uses a **6-digit one-time code (OTP)** sent by email:
 
 - Generated with `crypto.randomInt` and stored only as an HMAC-SHA256 hash (keyed with `OTP_SECRET`, or `JWT_SECRET` if unset) bound to its record. The raw code is never stored, returned by the API or logged in production.
-- Valid for **10 minutes**, usable **once**. Requesting a new code invalidates the previous one.
+- Valid for **5 minutes**, usable **once**. Requesting a new code invalidates the previous one.
 - **5 incorrect attempts** invalidate the code, after which a new code must be requested.
 - One email per user every **60 seconds** (`429` + `Retry-After`), plus the rate limits in [section 17](#17-rate-limits).
 - Codes are always tied to the **logged-in user** (JWT): nobody can verify another person's email.
@@ -407,7 +408,7 @@ Response `200` (SMTP configured):
   "message": "A verification code has been sent to your email address.",
   "email_delivered": true,
   "email": "pr***@example.com",
-  "expires_in_seconds": 600,
+  "expires_in_seconds": 300,
   "resend_after_seconds": 60
 }
 ```
@@ -489,8 +490,8 @@ curl -X POST http://localhost:5000/api/auth/resend-verification \
 
 Three steps: **email → 6-digit code → single-use reset token → new password**.
 
-- Codes follow the same rules as verification codes (HMAC-hashed, 10 minutes, single use, 5 attempts, 60-second resend cooldown; a new code invalidates the previous code and any reset token).
-- A correct code is exchanged for a 256-bit `reset_token` (SHA-256 hashed in the database, valid 10 minutes, single use). The password can only be changed with that token.
+- Codes follow the same rules as verification codes (HMAC-hashed, 5 minutes, single use, 5 attempts, 60-second resend cooldown; a new code invalidates the previous code and any reset token).
+- A correct code is exchanged for a 256-bit `reset_token` (SHA-256 hashed in the database, valid 5 minutes, single use). The password can only be changed with that token.
 - Responses never reveal whether an email is registered: unknown emails, wrong codes and expired codes get identical answers. The SMTP check runs before the account lookup, so an email outage returns the same `502`/`503` for every address.
 - A successful reset bcrypt-hashes the new password, sets `password_changed_at` (which **invalidates every JWT issued before it**, so all sessions are logged out), marks the email as verified, and invalidates every outstanding code and reset token.
 
@@ -511,7 +512,7 @@ Response `200`:
 {
   "success": true,
   "message": "If an account exists for this email, a password reset code has been sent.",
-  "expires_in_seconds": 600,
+  "expires_in_seconds": 300,
   "resend_after_seconds": 60
 }
 ```
